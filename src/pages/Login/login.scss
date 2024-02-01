@@ -74,23 +74,24 @@
 .login {
     width: 320px;
     padding: 30px;
-    padding-top: 70px;
+    padding-top: 60px;
 }
 .login__logo {
     width: 100px;
     height: 100px;
     margin: 0;
     left: 20px;
+    margin-bottom: 20px;
 }
 
 .login__field {
-    padding: 20px 0px;
+    padding-top: 15px;
     position: relative;
 }
 
 .login__icon {
     position: absolute;
-    top: 28px;
+    top: 23px;
     width: 15px;
     height: 15px;
     text-indent: none;
