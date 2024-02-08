@@ -11,4 +11,8 @@ const validateLogin = Yup.object({
         .required("Le mot de passe est requis")
 })
 
-export { validateLogin }
+const validateType = Yup.object({
+    name: Yup.string().required("Vous devez remplir le nom")
+})
+
+export { validateLogin, validateType }
