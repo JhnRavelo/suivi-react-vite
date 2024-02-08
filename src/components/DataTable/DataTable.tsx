@@ -12,6 +12,8 @@ type DataTableProps = {
     columns: Colums
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     setEditRow: React.Dispatch<React.SetStateAction<ProductType | null>>
+    setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setDeleteRow: React.Dispatch<React.SetStateAction<number | null | undefined>>
 }
 
 type Colums = {
@@ -29,23 +31,22 @@ type RenderCellParams = {
     row: Row
 }
 
-type Row = {
-    id: number
-    pdf: string | null | undefined
-}
+type Row = ProductType
 
-const DataTable = ({ rows, slug, columns, setOpen, setEditRow }: DataTableProps) => {
+const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, setDeleteRow }: DataTableProps) => {
     const tableRef = useRef<HTMLDivElement>(null)
 
     const handleEdit = (item: Row) => {
-        console.log(item)
+        setOpen(true)
+        setEditRow(item)
     }
     const handleSingle = (item: Row) => {
         console.log(item)
     }
 
     const handleDelete = (id: number) => {
-        console.log(id)
+        setDeleteRow(id)
+        setDeleteOpen(true)
     }
 
     const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf"))
@@ -79,7 +80,6 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow }: DataTableProps)
             if (slug == "type") {
                 const btn = tableRef.current.querySelector("button")
                 if (btn) {
-                    console.log(btn)
                     btn.style.display = "none"
                 }
             }
