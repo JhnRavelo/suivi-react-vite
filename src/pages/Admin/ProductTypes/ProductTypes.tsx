@@ -8,6 +8,7 @@ import AddForm from "../../../components/Form/Form"
 import { ProductType } from "../../../context/ProductTypeContext"
 import { validateType } from "../../../utils/validationSchemas"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 
 type InitialValuesType = {
   name: string
@@ -64,6 +65,8 @@ const ProductTypes = () => {
   const [open, setOpen] = useState(false)
   const productTypeContext = useProductType()
   const [editRow, setEditRow] = useState<ProductType | null>(null)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deleteRow, setDeleteRow] = useState<number | null>()
   const axiosPrivate = useAxiosPrivate()
 
   const handleSubmit = async (value: InitialValuesType) => {
@@ -84,47 +87,61 @@ const ProductTypes = () => {
 
   }
 
-  return (
-    <div className="users">
-      <div className="info">
-        <h1>Type de produits</h1>
-        <button onClick={() => setOpen(true)}>
-          <FontAwesomeIcon icon={faPlus} beat />
-          Ajout de type
-        </button>
-      </div>
-      <DataTable
-        slug="type"
-        columns={columns}
-        rows={productTypeContext?.types}
-        setOpen={setOpen}
-        setEditRow={setEditRow}
-      //   setDeleteOpen={setDeleteOpen}
-      //   setDeleteRow={setDeleteRow}
-      />
+  const handleDelete = async () => {
+    try {
+      const res = await axiosPrivate.delete(`/productType/${deleteRow}`)
+      if (res.data.success) {
+        productTypeContext?.setTypes(res.data.types)
+        setDeleteOpen(false)
+      }
 
-      {open && (
-        <AddForm
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <>
+      <div className="users">
+        <div className="info">
+          <h1>Type de produits</h1>
+          <button onClick={() => setOpen(true)}>
+            <FontAwesomeIcon icon={faPlus} beat />
+            Ajout de type
+          </button>
+        </div>
+        <DataTable
           slug="type"
           columns={columns}
+          rows={productTypeContext?.types}
           setOpen={setOpen}
-          editRow={editRow}
           setEditRow={setEditRow}
-          initialValues={initialValues}
-          validate={validateType}
-          handleSubmit={handleSubmit}
+          setDeleteOpen={setDeleteOpen}
+          setDeleteRow={setDeleteRow}
+        />
+
+        {open && (
+          <AddForm
+            slug="type"
+            columns={columns}
+            setOpen={setOpen}
+            editRow={editRow}
+            setEditRow={setEditRow}
+            initialValues={initialValues}
+            validate={validateType}
+            handleSubmit={handleSubmit}
+          />
+        )}
+      </div>
+      {deleteOpen && (
+        <ModalDelete
+          setDeleteOpen={setDeleteOpen}
+          setDeleteRow={setDeleteRow}
+          title="cet utilisateur"
+          handleDelete={handleDelete}
         />
       )}
-    </div>
-    //   {deleteOpen && (
-    //     <ModalDelete
-    //       setDeleteOpen={setDeleteOpen}
-    //       setDeleteRow={setDeleteRow}
-    //       deleteRow={deleteRow}
-    //       url="/auth/User"
-    //       title="cet utilisateur"
-    //     />
-    //   )}
+    </>
   )
 }
 
