@@ -1,0 +1,49 @@
+.dataTable {
+    // padding-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+    animation: tonga 0.6s ease;
+
+    .dataGrid {
+        background: #f3f3f3;
+        padding: 20px;
+
+        .MuiDataGrid-toolbarContainer {
+            flex-direction: row-reverse;
+        }
+        .MuiDataGrid-virtualScrollerRenderZone {
+            background-color: rgb(233, 230, 230);
+
+            .MuiDataGrid-row {
+                .MuiDataGrid-cell {
+                    white-space: wrap;
+                    overflow: auto;
+                    // color: red;
+                }
+            }
+        }
+
+        .imgprod {
+            border-radius: 5px;
+            object-fit: fill;
+        }
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .action {
+            display: flex;
+            gap: 5px;
+
+            img {
+                width: 20px;
+                // height: 20px;
+                cursor: pointer;
+                object-fit: fill;
+            }
+        }
+    }
+}
