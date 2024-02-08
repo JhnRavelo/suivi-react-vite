@@ -37,7 +37,7 @@ const Login = () => {
       }
 
       authContext?.setAuth({ role: res.data.role, accessToken: res.data.accessToken, name: res.data.name, email: res.data.email })
-      navigate("/home")
+      navigate("/admin")
     } catch (error) {
       console.log(error)
       setError("Problème de serveur")
@@ -49,7 +49,7 @@ const Login = () => {
       <div className="screen">
         <div className="screen__content">
           <Formik initialValues={initialValues} onSubmit={(values) => handleSubmit(values)} validationSchema={validateLogin} >
-            {({errors})=>(<Form className="login">
+            {({ errors }) => (<Form className="login">
               <img src={LogoEuro} alt="logo d'Europ'Alu" className="login__logo" />
               <div className="login__field">
                 <FontAwesomeIcon icon={faUser} className="login__icon" />
