@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import Login from "../pages/Login/Login"
 import PersistantLogin from "../components/Private/PersistantLogin"
 import PrivateRoutes from "../components/Private/PrivateRouter"
-import Home from "../pages/Home/Home"
+import Admin from "../pages/Admin"
 
 const prime = import.meta.env.VITE_PRIME
 
@@ -12,7 +12,7 @@ const AppRouter = () => {
             <Route element={<Login />} path="/" />
             <Route element={<PersistantLogin />}>
                 <Route element={<PrivateRoutes prime={prime} />} >
-                    <Route element={<Home />} path="/home" />
+                    <Route element={<Admin />} path="/admin/*" />
                 </Route>
             </Route>
         </Routes>
