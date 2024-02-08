@@ -1,0 +1,103 @@
+#champDelete {
+    width: 100%;
+    /* height: 100vh; */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.delete__overlay {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.379);
+    top: 0;
+    left: 0;
+}
+
+.delet__modal {
+    padding: 10px;
+    width: 350px;
+    height: 250px;
+    border-radius: 20px;
+    background-color: #fff;
+    position: fixed;
+    z-index: 11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow:
+        3px 3px 8px #343434,
+        -3px -3px 8px #818181;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.delet__modal .x__mark {
+    position: absolute;
+    top: 0px;
+    border-bottom-left-radius: 10px;
+    right: 0px;
+    padding: 10px;
+    background-color: var(--orange);
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.delet__modal .delete__h1 {
+    font-size: 21px;
+    margin: 5px;
+    font-weight: 800;
+    color: #000f22;
+}
+
+.delet__modal .delete__p {
+    font-size: 16px;
+    margin: 5px;
+    font-weight: 700;
+    color: #000f22;
+}
+
+.button__delete {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+.button__delete button {
+    padding: 10px 30px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    background-color: rgb(219, 18, 18);
+    box-shadow:
+        3px 3px 8px #b1b1b1,
+        -3px -3px 8px #fff;
+    transition: all 0.6s ease;
+}
+
+.button__delete button:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.button__delete button:active {
+    transform: scale(0.9);
+}
+.modal__trash img {
+    width: 50px;
+    height: 50px;
+}
+
+.button__delete button.cancel {
+    background-color: white;
+    color: #000;
+}
