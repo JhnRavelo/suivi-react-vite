@@ -8,4 +8,10 @@ const defaultAxios = axios.create({
     withCredentials: true
 })
 
-export {defaultAxios}
+const privateAxios = axios.create({
+    baseURL:serverUrl,
+    withCredentials: true,
+    headers:{"Content-Type": "multipart/form-data"}
+  })
+
+export {defaultAxios, privateAxios}
