@@ -7,7 +7,7 @@ type AuthUser = {
     email: string | undefined
 }
 
-type AuthProviderProps = {
+type ProviderProps = {
     children: React.ReactNode
 }
 
@@ -18,7 +18,7 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-const AuthProvider = ({children}:AuthProviderProps)=>{
+const AuthProvider = ({children}:ProviderProps)=>{
     const [auth, setAuth] = useState<null | AuthUser>(null)
     return (
         <AuthContext.Provider value={{auth, setAuth}}>
@@ -30,4 +30,4 @@ const AuthProvider = ({children}:AuthProviderProps)=>{
 export default AuthContext
 
 export {AuthProvider}
-export type {AuthUser}
+export type {AuthUser, ProviderProps}
