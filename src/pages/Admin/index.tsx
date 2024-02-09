@@ -6,11 +6,13 @@ import "./index.scss"
 import Menu from "../../components/Menu/Menu"
 import AdminRouter from "../../routers/AdminRouter"
 import useProductType from "../../hooks/useProductType"
+import useUser from "../../hooks/useUser"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
   const headerContext = useHeader()
   const productTypeContext = useProductType()
+  const userContext = useUser()
 
   useEffect(() => {
     fetchData()
@@ -26,6 +28,11 @@ const Admin = () => {
       const fetchProductTypes = await axiosPrivate.get("/productType/getAll")
       if (fetchProductTypes.data.success) {
         productTypeContext?.setTypes(fetchProductTypes.data.productTypes)
+      }
+      const fetchUsers = await axiosPrivate.get("/auth/getAll")
+      if(fetchUsers.data.success){
+        console.log(fetchUsers.data.users)
+        userContext?.setUsers(fetchUsers.data.users)
       }
     } catch (error) {
       console.log(error)
