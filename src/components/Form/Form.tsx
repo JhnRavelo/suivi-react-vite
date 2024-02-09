@@ -6,20 +6,24 @@ import { InitialValuesType } from "../../pages/Admin/ProductTypes/ProductTypes";
 import * as Yup from "yup"
 import "./form.scss"
 import InputFile from "./InputFile";
+import { User } from "../../context/UserContext";
+import { InitialValuesUser } from "../../pages/Admin/Users/Users";
+
+type Edit = ProductType | null | User
 
 type AddFormProps = {
     slug: string
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setEditRow: React.Dispatch<React.SetStateAction<ProductType | null>>
-    editRow: ProductType | null
+    setEditRow: React.Dispatch<React.SetStateAction<Edit>>
+    editRow: Edit
     columns: Colums
-    initialValues: InitialValuesType
+    initialValues: InitialValuesType | InitialValuesUser
     validate: Yup.ObjectSchema<{
         name: string;
     }, Yup.AnyObject, {
         name: undefined;
     }, "">
-    handleSubmit: (value:InitialValuesType)=>void
+    handleSubmit: (value:InitialValuesType | InitialValuesUser)=>void
 }
 
 const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, editRow, handleSubmit }: AddFormProps) => {
@@ -105,3 +109,5 @@ const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, 
 }
 
 export default AddForm
+
+export type {Edit}

@@ -4,15 +4,14 @@ import { useState } from "react"
 import "./productTypes.scss"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
 import useProductType from "../../../hooks/useProductType"
-import AddForm from "../../../components/Form/Form"
-import { ProductType } from "../../../context/ProductTypeContext"
+import AddForm, { Edit } from "../../../components/Form/Form"
 import { validateType } from "../../../utils/validationSchemas"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 
 type InitialValuesType = {
   name: string
-  pdf: File | null
+  pdf?: File | null 
 }
 
 const columns: Colums = [
@@ -64,7 +63,7 @@ const initialValues: InitialValuesType = {
 const ProductTypes = () => {
   const [open, setOpen] = useState(false)
   const productTypeContext = useProductType()
-  const [editRow, setEditRow] = useState<ProductType | null>(null)
+  const [editRow, setEditRow] = useState<Edit>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteRow, setDeleteRow] = useState<number | null>()
   const axiosPrivate = useAxiosPrivate()
@@ -76,10 +75,20 @@ const ProductTypes = () => {
       formData.append("pdf", value.pdf)
     }
     try {
-      const res = await axiosPrivate.post("/productType/add", formData)
-      if (res.data.success) {
-        productTypeContext?.setTypes(res.data.types)
-        setOpen(false)
+      if (editRow) {
+        formData.append("id", editRow.id.toString())
+        const res = await axiosPrivate.post("/productType/update", formData)
+        if (res.data.success) {
+          productTypeContext?.setTypes(res.data.types)
+          setEditRow(null)
+          setOpen(false)
+        }
+      } else {
+        const res = await axiosPrivate.post("/productType/add", formData)
+        if (res.data.success) {
+          productTypeContext?.setTypes(res.data.types)
+          setOpen(false)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -127,7 +136,7 @@ const ProductTypes = () => {
             setOpen={setOpen}
             editRow={editRow}
             setEditRow={setEditRow}
-            initialValues={initialValues}
+            initialValues={editRow ? { name: editRow.name, pdf: null } : initialValues}
             validate={validateType}
             handleSubmit={handleSubmit}
           />
@@ -137,7 +146,7 @@ const ProductTypes = () => {
         <ModalDelete
           setDeleteOpen={setDeleteOpen}
           setDeleteRow={setDeleteRow}
-          title="cet utilisateur"
+          title="ce type de produit"
           handleDelete={handleDelete}
         />
       )}

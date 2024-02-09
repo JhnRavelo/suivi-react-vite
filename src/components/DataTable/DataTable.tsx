@@ -5,13 +5,16 @@ import faDelete from "../../assets/svg/delete.svg"
 import faPDF from "../../assets/png/pdf.png"
 import "./dataTable.scss"
 import { ProductType, ProductTypes } from "../../context/ProductTypeContext"
+import useProductType from "../../hooks/useProductType"
+import { useNavigate } from "react-router-dom"
+import { User, Users } from "../../context/UserContext"
 
 type DataTableProps = {
-    rows: ProductTypes | [] | undefined
-    slug: string
+    rows: ProductTypes | [] | undefined | Users
+    slug: "type" | "user"
     columns: Colums
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setEditRow: React.Dispatch<React.SetStateAction<ProductType | null>>
+    setEditRow: React.Dispatch<React.SetStateAction<ProductType | User | null>>
     setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
     setDeleteRow: React.Dispatch<React.SetStateAction<number | null | undefined>>
 }
@@ -31,17 +34,20 @@ type RenderCellParams = {
     row: Row
 }
 
-type Row = ProductType
+type Row = ProductType | User
 
 const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, setDeleteRow }: DataTableProps) => {
     const tableRef = useRef<HTMLDivElement>(null)
+    const productTypeContext = useProductType()
+    const navigate = useNavigate()
 
     const handleEdit = (item: Row) => {
         setOpen(true)
         setEditRow(item)
     }
-    const handleSingle = (item: Row) => {
-        console.log(item)
+    const handleSingle = (item: ProductType) => {
+        productTypeContext?.setType(item)
+        navigate(`/admin/type/${item.id}`)
     }
 
     const handleDelete = (id: number) => {
@@ -49,7 +55,11 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
         setDeleteOpen(true)
     }
 
-    const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf"))
+    function isProductType(obj: User | ProductType): obj is ProductType {
+        return obj && typeof obj === 'object' && 'pdf' in obj;
+    }
+
+    const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf" && item.field != "confirmPassword"))
 
     const actionColumn = {
         field: "action",
@@ -64,8 +74,8 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                     <div className="delete" onClick={() => handleDelete(params.row.id)}>
                         <img src={faDelete} alt="" />
                     </div>
-                    {slug == "type" && params.row?.pdf && (
-                        <div onClick={() => handleSingle(params.row)}>
+                    {slug == "type" && isProductType(params.row) && params.row?.pdf && (
+                        <div onClick={() => handleSingle(params.row as ProductType)}>
                             <img src={faPDF} alt="" />
                         </div>
                     )}
