@@ -3,10 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ErrorMessage, Field } from "formik";
 import { useRef } from "react";
 
+type InputCHeckBoxProps = {
+  type: string[] | undefined | null
+  title: string
+  name: string
+  arrays: string[] | undefined | null
+}
 
-
-const InputCHeckBox = ({ type, arrays, title, name }) => {
-  const btnListRef = useRef< HTMLDivElement | null >(null);
+const InputCHeckBox = ({ type, arrays, title, name }: InputCHeckBoxProps) => {
+  const btnListRef = useRef<HTMLDivElement | null>(null);
   const typeRef = useRef<HTMLUListElement | null>(null);
 
   const handleListClick = () => {
@@ -14,19 +19,20 @@ const InputCHeckBox = ({ type, arrays, title, name }) => {
     const typeList = typeRef.current;
     btnList?.classList.toggle("open");
     typeList?.classList.toggle("open");
+    console.log(type)
   };
   return (
     <div className="item">
       <div className="menu-deroulant">
-        <label>{title}</label>
+      <label>{title}</label>
 
-        <div className="container">
+        <div className="containerList">
           <div
             className="select-btn"
             ref={btnListRef}
             onClick={handleListClick}
           >
-            <span className="btn-text">{type && type}</span>
+            <span className="btn-text">{type ? type[0] : ""}</span>
             <span className="arrow-dwn">
               <FontAwesomeIcon
                 icon={faChevronDown}
@@ -35,7 +41,7 @@ const InputCHeckBox = ({ type, arrays, title, name }) => {
             </span>
           </div>
           <ul className="list-type" ref={typeRef}>
-            {arrays && arrays.map((array, index) => (
+            {arrays && arrays.map((array:string, index:number) => (
               <label className="type" key={index}>
                 <Field
                   className="checkbox"
