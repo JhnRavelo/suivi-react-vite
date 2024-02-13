@@ -4,14 +4,16 @@ import { useState } from "react"
 import "./productTypes.scss"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
 import useProductType from "../../../hooks/useProductType"
-import AddForm, { Edit } from "../../../components/Form/Form"
+import AddForm, { Edit, InitialValues } from "../../../components/Form/Form"
 import { validateType } from "../../../utils/validationSchemas"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
+import { isInitialValuesType, isProductType } from "../../../utils/verificationType"
+
 
 type InitialValuesType = {
-  name: string
-  pdf?: File | null 
+  name?: string
+  pdf?: File | null
 }
 
 const columns: Colums = [
@@ -68,30 +70,35 @@ const ProductTypes = () => {
   const [deleteRow, setDeleteRow] = useState<number | null>()
   const axiosPrivate = useAxiosPrivate()
 
-  const handleSubmit = async (value: InitialValuesType) => {
+  const handleSubmit = async (value: InitialValues) => {
     const formData = new FormData()
-    formData.append("name", value.name)
-    if (value.pdf) {
-      formData.append("pdf", value.pdf)
-    }
-    try {
-      if (editRow) {
-        formData.append("id", editRow.id.toString())
-        const res = await axiosPrivate.post("/productType/update", formData)
-        if (res.data.success) {
-          productTypeContext?.setTypes(res.data.types)
-          setEditRow(null)
-          setOpen(false)
-        }
-      } else {
-        const res = await axiosPrivate.post("/productType/add", formData)
-        if (res.data.success) {
-          productTypeContext?.setTypes(res.data.types)
-          setOpen(false)
+    if (isInitialValuesType(value)) {
+      if (value.name) {
+        formData.append("name", value.name)
+      }
+      if (value.pdf) {
+        formData.append("pdf", value.pdf)
+      }
+      try {
+        if (editRow) {
+          formData.append("id", editRow.id.toString())
+          const res = await axiosPrivate.post("/productType/update", formData, { headers: { "Content-Type": "multipart/form-data" } })
+          if (res.data.success) {
+            productTypeContext?.setTypes(res.data.types)
+            setEditRow(null)
+            setOpen(false)
+          }
+        } else {
+          const res = await axiosPrivate.post("/productType/add", formData, { headers: { "Content-Type": "multipart/form-data" } })
+          if (res.data.success) {
+            productTypeContext?.setTypes(res.data.types)
+            setOpen(false)
+          }
         }
       }
-    } catch (error) {
-      console.log(error)
+      catch (error) {
+        console.log(error)
+      }
     }
 
   }
@@ -136,7 +143,7 @@ const ProductTypes = () => {
             setOpen={setOpen}
             editRow={editRow}
             setEditRow={setEditRow}
-            initialValues={editRow ? { name: editRow.name, pdf: null } : initialValues}
+            initialValues={isProductType(editRow) && editRow ? { name: editRow.name, pdf: null } : initialValues}
             validate={validateType}
             handleSubmit={handleSubmit}
           />
