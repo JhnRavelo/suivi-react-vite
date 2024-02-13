@@ -11,7 +11,7 @@ const defaultAxios = axios.create({
 const privateAxios = axios.create({
     baseURL:serverUrl,
     withCredentials: true,
-    headers:{"Content-Type": "multipart/form-data"}
+    headers: {"Content-Type": 'application/json'}
   })
 
 export {defaultAxios, privateAxios}
