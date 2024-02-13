@@ -3,6 +3,8 @@ import * as Yup from "yup"
 const phoneRegEx =
     /^((\+\d{1,3}(-|)?\(?\d\)?(-|)?\d{1,3})|(\(?\d{2,3}\)?))(-|)?(\d{3,4})(-|)?(\d{4})((x|ext)\d{1,5}){0,1}$/;
 
+const dimensionRegex = /^\d+\*\d+$/;
+
 const validateLogin = Yup.object({
     email: Yup.string().required("Vous devez mettre votre addresse email").email("L'addresse email est invalide"),
     password: Yup.string().min(8, "Le mot de passe doit avoir au moins 8 caractères")
@@ -64,4 +66,19 @@ const validateUserUpdate = Yup.object({
         .required("Le numéro de téléphone est requis"),
 })
 
-export { validateLogin, validateType, validateUser, validateUserUpdate }
+const validateProduct = Yup.object({
+    type: Yup.array()
+        .of(Yup.string())
+        .min(1, "Selectionnez un type de ménuiserie")
+        .max(1, "Selectionnez seulement un type"),
+    dimension: Yup.string()
+        .required("La dimension est réquis")
+        .matches(dimensionRegex, "De la forme hauteur*largeur"),
+    tech: Yup.array()
+        .of(Yup.string())
+        .min(1, "Selectionnez un technicien")
+        .max(1, "Selectionnez seulement un technicien"),
+
+})
+
+export { validateLogin, validateType, validateUser, validateUserUpdate, validateProduct }
