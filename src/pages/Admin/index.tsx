@@ -7,12 +7,16 @@ import Menu from "../../components/Menu/Menu"
 import AdminRouter from "../../routers/AdminRouter"
 import useProductType from "../../hooks/useProductType"
 import useUser from "../../hooks/useUser"
+import useProduct from "../../hooks/useProduct"
+import { ProductType } from "../../context/ProductTypeContext"
+import { User } from "../../context/UserContext"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
   const headerContext = useHeader()
   const productTypeContext = useProductType()
   const userContext = useUser()
+  const productContext = useProduct()
 
   useEffect(() => {
     fetchData()
@@ -28,11 +32,22 @@ const Admin = () => {
       const fetchProductTypes = await axiosPrivate.get("/productType/getAll")
       if (fetchProductTypes.data.success) {
         productTypeContext?.setTypes(fetchProductTypes.data.productTypes)
+        const checkboxTypes = fetchProductTypes.data.productTypes.map((item: ProductType) => {
+          return item.name
+        })
+        productTypeContext?.setCheckboxTypes(checkboxTypes)
       }
       const fetchUsers = await axiosPrivate.get("/auth/getAll")
-      if(fetchUsers.data.success){
-        console.log(fetchUsers.data.users)
+      if (fetchUsers.data.success) {
         userContext?.setUsers(fetchUsers.data.users)
+        const checkboxUsers = fetchUsers.data.users.map((item: User)=>{
+          return item.name
+        })
+        userContext?.setCheckboxUser(checkboxUsers)
+      }
+      const fetchProducts = await axiosPrivate.get("/product/getAll")
+      if (fetchProducts.data.success) {
+        productContext?.setProducts(fetchProducts.data.products)
       }
     } catch (error) {
       console.log(error)
