@@ -21,7 +21,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
 
   .modal {
     box-shadow: rgba(0, 0, 0, 1) 0px 3px 8px;
@@ -29,7 +28,7 @@
     border-radius: 10px;
     background-color: $main-bg;
     position: relative;
-    animation: modal .3s ease;
+    animation: modal 0.3s ease;
 
     .desabledBtn {
       background-color: red !important;
@@ -37,21 +36,21 @@
     }
 
     .error {
-        padding-top: 3px;
-        width: 100%;
-        height: 30px;
-        text-align: center;
-        color: rgb(255, 21, 0);
-        font-weight: 700;
-        font-size: 14px;
-        /* border: 1px solid green; */
-      }
-    
+      padding-top: 3px;
+      width: 100%;
+      height: 30px;
+      text-align: center;
+      color: rgb(255, 21, 0);
+      font-weight: 700;
+      font-size: 14px;
+      /* border: 1px solid green; */
+    }
+
     label {
-        font-size: 14px;
-        color: white;
-        font-weight: 400;
-        letter-spacing: .5px;
+      font-size: 14px;
+      color: white;
+      font-weight: 400;
+      letter-spacing: 0.5px;
     }
 
     h1 {
@@ -70,7 +69,7 @@
       font-weight: 900;
       background-color: rgb(212, 14, 14);
       padding: 10px;
-      box-shadow: rgba(0, 0, 0, .5) 0px 3px 8px;
+      box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
     }
 
     form {
@@ -87,62 +86,55 @@
         gap: 10px;
         margin-bottom: 20px;
 
-
-        .menu-deroulant{
+        .menu-deroulant {
           padding: 0px;
-          .container {
-            // max-width: 40%;
-            // width: 150%;
-            // padding-right: 0 !important;
-            // padding-left: 0 !important;
+          .containerList {
             background: transparent;
             position: relative;
           }
-          
-          .select-btn{
+
+          .select-btn {
             display: flex;
             height: 40px;
             align-items: center;
             justify-content: space-between;
-            // padding: 0 16px;
+            padding: 0 16px;
             border-radius: 8px;
             cursor: pointer;
             background-color: #fcfeff;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    
-            .btn-text{
+
+            .btn-text {
               /* height: 40px; */
               width: 100%;
-              font-size: 17px;
+              font-size: 16px;
               font-weight: 400;
               color: #333;
             }
-    
-            .arrow-dwn{
+
+            .arrow-dwn {
               display: flex;
               height: 21px;
               width: 21px;
               color: #fff;
               font-size: 14px;
               border-radius: 50%;
-              background: var(--orange);
+              background: $orange;
               align-items: center;
               justify-content: center;
               transition: 0.3s;
             }
           }
-          
-          
-          .select-btn.open .arrow-dwn{
+
+          .select-btn.open .arrow-dwn {
             transform: rotate(-180deg);
           }
-    
-    
-          .list-type.open{
+
+          .list-type.open {
             opacity: 1;
             pointer-events: all;
           }
-          .list-type{
+          .list-type {
             position: absolute;
             margin-top: 5px;
             width: 100%;
@@ -155,43 +147,41 @@
             /* display: none; */
             opacity: 0;
             pointer-events: none;
-            transition: all .3s ease;
-    
-            .type{
-                display: flex;
-                // align-items: center;
-                list-style: none;
-                height: 40px;
-                cursor: pointer;
-                transition: 0.3s;
-                padding: 0 15px;
-                border-radius: 8px;
-                margin-top: 0px;
-                justify-content: flex-start;
-              }
-              .type:hover{
-                background-color: #e7edfe;
-              }
-              .item-text{
-                font-size: 16px;
-                font-weight: 400;
-                color: #333;
-              }
-              .checkbox{
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 16px;
-                width: 16px;
-                border-radius: 4px;
-                margin-right: 12px;
-                border: 1.5px solid #c0c0c0;
-                transition: all 0.3s ease-in-out;
-              }
-          }
-        } 
+            transition: all 0.3s ease;
 
-        
+            .type {
+              display: flex;
+              align-items: center;
+              list-style: none;
+              height: 40px;
+              cursor: pointer;
+              transition: 0.3s;
+              padding: 0 15px;
+              border-radius: 8px;
+              margin-top: 0px;
+              justify-content: flex-start;
+            }
+            .type:hover {
+              background-color: #e7edfe;
+            }
+            .item-text {
+              font-size: 12px;
+              font-weight: 400;
+              color: #333;
+            }
+            .checkbox {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 16px;
+              width: 16px;
+              border-radius: 4px;
+              margin-right: 12px;
+              border: 1.5px solid #c0c0c0;
+              transition: all 0.3s ease-in-out;
+            }
+          }
+        }
 
         input {
           padding: 10px;
@@ -199,13 +189,12 @@
           color: white;
           outline: none;
           border-radius: 3px;
-          box-shadow: rgba(0, 0, 0, .5) 0px 3px 8px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
           border: 1px solid $soft-color;
-          
         }
-        
+
         .labelInput {
-          box-shadow: rgba(0, 0, 0, .5) 0px 3px 8px;
+          box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
           border: 1px solid $soft-color;
           padding: 10px;
           background-color: transparent;
@@ -219,7 +208,7 @@
           cursor: pointer;
           overflow: hidden;
 
-          img{
+          img {
             width: 20px;
           }
 
@@ -238,18 +227,17 @@
         border: none;
         font-size: 20px;
         font-weight: 700;
-        letter-spacing: .5px;
+        letter-spacing: 0.5px;
         background-color: $orange;
         color: #fff;
-        box-shadow: rgba(0, 0, 0, .5) 0px 3px 8px;
-        transition: .3s ease;
+        box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
+        transition: 0.3s ease;
         &:hover {
           transform: scale(1.02);
         }
         &:active {
           transform: scale(1);
         }
-
       }
     }
   }
