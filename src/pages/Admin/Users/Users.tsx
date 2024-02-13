@@ -1,17 +1,18 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import "../ProductTypes/productTypes.scss"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
-import AddForm, { Edit } from "../../../components/Form/Form"
+import AddForm, { Edit, InitialValues } from "../../../components/Form/Form"
 import { validateUser, validateUserUpdate } from "../../../utils/validationSchemas"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 import useUser from "../../../hooks/useUser"
 import { User } from "../../../context/UserContext"
+import { isInitialValuesUser } from "../../../utils/verificationType"
 
 type InitialValuesUser = {
-    name: string
+    name?: string
     email?: string
     phone?: number | null
     password?: string | null
@@ -31,7 +32,7 @@ const Users = () => {
     const userContext = useUser()
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
-    const [deleteRow, setDeleteRow] = useState<number | null>()
+    const [deleteRow, setDeleteRow] = useState<number | null>(null)
     const axiosPrivate = useAxiosPrivate()
 
     const columns: Colums = [
@@ -73,7 +74,7 @@ const Users = () => {
         },
         {
             field: "password",
-            type: "string",
+            type: "password",
             inputMode: "password",
             headerName: "Mot de passe",
             placeholder: `${editRow ? "Ne changera pas si vide" : "Le mot de passe"}`,
@@ -82,7 +83,7 @@ const Users = () => {
         },
         {
             field: "confirmPassword",
-            type: "string",
+            type: "password",
             inputMode: "password",
             headerName: "Confirmation mot de passe",
             placeholder: "Retapez le mot de passe",
@@ -109,36 +110,40 @@ const Users = () => {
         },
     ]
 
-    const handleSubmit = async (value: InitialValuesUser) => {
-        const formData = new FormData()
-        formData.append("name", value.name)
-        if (value.password) {
-            formData.append("password", value.password)
-        }
-        if (value.phone) {
-            formData.append("phone", value.phone.toString())
-        }
-        if (value.email) {
-            formData.append("email", value.email)
-        }
-        try {
-            if (editRow) {
-                formData.append("id", editRow.id.toString())
-                const res = await axiosPrivate.post("/auth/update", formData)
-                if (res.data.success) {
-                    userContext?.setUsers(res.data.users)
-                    setEditRow(null)
-                    setOpen(false)
+    const handleSubmit = async (value: InitialValues) => {
+        if (isInitialValuesUser(value)) {
+            try {
+                const formData = new FormData()
+                if (value.name) {
+                    formData.append("name", value.name)
                 }
-            } else {
-                const res = await axiosPrivate.post("/auth/add", formData)
-                if (res.data.success) {
-                    userContext?.setUsers(res.data.users)
-                    setOpen(false)
+                if (value.password) {
+                    formData.append("password", value.password)
                 }
+                if (value.phone) {
+                    formData.append("phone", value.phone.toString())
+                }
+                if (value.email) {
+                    formData.append("email", value.email)
+                }
+                if (editRow) {
+                    formData.append("id", editRow.id.toString())
+                    const res = await axiosPrivate.post("/auth/update", formData)
+                    if (res.data.success) {
+                        userContext?.setUsers(res.data.users)
+                        setEditRow(null)
+                        setOpen(false)
+                    }
+                } else {
+                    const res = await axiosPrivate.post("/auth/add", formData)
+                    if (res.data.success) {
+                        userContext?.setUsers(res.data.users)
+                        setOpen(false)
+                    }
+                }
+            } catch (error) {
+                console.log(error)
             }
-        } catch (error) {
-            console.log(error)
         }
 
     }
@@ -170,7 +175,7 @@ const Users = () => {
                 <div className="info">
                     <h1>Utilisateurs</h1>
                     <button onClick={() => setOpen(true)}>
-                        <FontAwesomeIcon icon={faPlus} beat />
+                        <FontAwesomeIcon icon={faUserPlus} beat />
                         Ajout d'utilisateur
                     </button>
                 </div>
