@@ -4,7 +4,7 @@ import "./modalDelete.scss"
 type ModalDeleteProps = {
     title: string
     setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setDeleteRow: React.Dispatch<React.SetStateAction<number | null | undefined>>
+    setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>
     handleDelete: () => Promise<void>
 }
 
