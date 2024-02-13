@@ -8,15 +8,17 @@ import { ProductType, ProductTypes } from "../../context/ProductTypeContext"
 import useProductType from "../../hooks/useProductType"
 import { useNavigate } from "react-router-dom"
 import { User, Users } from "../../context/UserContext"
+import { Products } from "../../context/ProductContext"
+import { isProductType } from "../../utils/verificationType"
 
 type DataTableProps = {
-    rows: ProductTypes | [] | undefined | Users
-    slug: "type" | "user"
+    rows: ProductTypes | [] | undefined | Users | Products
+    slug: "type" | "user" | "product" 
     columns: Colums
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
     setEditRow: React.Dispatch<React.SetStateAction<ProductType | User | null>>
     setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setDeleteRow: React.Dispatch<React.SetStateAction<number | null | undefined>>
+    setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>
 }
 
 type Colums = {
@@ -25,8 +27,8 @@ type Colums = {
     width: number;
     disableExport: boolean;
     type: string;
-    inputMode?: string;
-    placeholder?: string;
+    inputMode: string;
+    placeholder: string;
 }[]
 
 
@@ -53,10 +55,6 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
     const handleDelete = (id: number) => {
         setDeleteRow(id)
         setDeleteOpen(true)
-    }
-
-    function isProductType(obj: User | ProductType): obj is ProductType {
-        return obj && typeof obj === 'object' && 'pdf' in obj;
     }
 
     const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf" && item.field != "confirmPassword"))
