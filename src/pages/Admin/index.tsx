@@ -10,6 +10,7 @@ import useUser from "../../hooks/useUser"
 import useProduct from "../../hooks/useProduct"
 import { ProductType } from "../../context/ProductTypeContext"
 import { User } from "../../context/UserContext"
+import useSuvi from "../../hooks/useSuvi"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -17,6 +18,7 @@ const Admin = () => {
   const productTypeContext = useProductType()
   const userContext = useUser()
   const productContext = useProduct()
+  const suiviContext = useSuvi()
 
   useEffect(() => {
     fetchData()
@@ -48,6 +50,10 @@ const Admin = () => {
       const fetchProducts = await axiosPrivate.get("/product/getAll")
       if (fetchProducts.data.success) {
         productContext?.setProducts(fetchProducts.data.products)
+      }
+      const fetchSuivis = await axiosPrivate.get("/suivi/getAll")
+      if(fetchSuivis.data.success){
+        suiviContext?.setSuivis(fetchSuivis.data.suivis)
       }
     } catch (error) {
       console.log(error)
