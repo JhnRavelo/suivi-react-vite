@@ -5,10 +5,20 @@ import { InitialValuesUser } from "../pages/Admin/Users/Users";
 import { InitialValues } from "../components/Form/Form";
 import { InitialValuesType } from "../pages/Admin/ProductTypes/ProductTypes";
 import { Product } from "../context/ProductContext";
+import { Row } from "../components/DataTable/DataTable";
+import { Suivi } from "../context/SuiviContext";
 
 export function isProductType(obj: Edit): obj is ProductType {
     if (obj) {
         return obj && typeof obj === 'object' && 'pdf' in obj;
+    } else {
+        return false
+    }
+}
+
+export function isSuivi(obj: Row): obj is Suivi {
+    if (obj) {
+        return obj && typeof obj === 'object' && 'problem' in obj;
     } else {
         return false
     }
