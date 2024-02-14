@@ -11,6 +11,7 @@ import { validateProduct } from "../../../utils/validationSchemas"
 import { isInitialValuesProduct, isProduct } from "../../../utils/verificationType"
 import useProductType from "../../../hooks/useProductType"
 import useUser from "../../../hooks/useUser"
+import PrintQR from "../../../components/PrintQR/PrintQR"
 
 export type initialValuesProduct = {
     type?: string[] | null
@@ -48,7 +49,7 @@ const columns: Colums = [
         inputMode: "text",
         headerName: "Hauteur*Largeur",
         placeholder: "Hauteur*Largeur",
-        width: 180,
+        width: 120,
         disableExport: false
     },
     {
@@ -102,7 +103,7 @@ const columns: Colums = [
         inputMode: "text",
         headerName: "Emplacement",
         placeholder: "Emplacement du produit",
-        width: 120,
+        width: 200,
         disableExport: true
     },
     {
@@ -111,7 +112,7 @@ const columns: Colums = [
         inputMode: "text",
         headerName: "Date de création",
         placeholder: "La date",
-        width: 180,
+        width: 120,
         disableExport: false,
     },
 ]
@@ -133,12 +134,22 @@ const Products = () => {
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [deleteRow, setDeleteRow] = useState<number | null>(null)
+    const [printOpen, setPrintOpen] = useState(false)
     const axiosPrivate = useAxiosPrivate()
     const productTypeContext = useProductType()
     const userContext = useUser()
 
     const handleDelete = async () => {
-
+        try {
+            const res = await axiosPrivate.delete(`/product/${deleteRow}`)
+            if (res.data.success) {
+                productContext?.setProducts(res.data.products)
+                setDeleteOpen(false)
+                setDeleteRow(null)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleSubmit = async (value: InitialValues) => {
@@ -205,6 +216,7 @@ const Products = () => {
                     setEditRow={setEditRow}
                     setDeleteOpen={setDeleteOpen}
                     setDeleteRow={setDeleteRow}
+                    setPrintOpen={setPrintOpen}
                 />
 
                 {open && (
@@ -239,6 +251,13 @@ const Products = () => {
                     handleDelete={handleDelete}
                 />
             )}
+            {printOpen &&
+                <PrintQR
+                    setPrintOpen={setPrintOpen}
+                    editRow={editRow}
+                    setEditRow={setEditRow}
+                />
+            }
         </>
     )
 }

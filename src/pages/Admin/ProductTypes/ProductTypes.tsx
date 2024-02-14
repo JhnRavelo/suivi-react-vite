@@ -67,7 +67,7 @@ const ProductTypes = () => {
   const productTypeContext = useProductType()
   const [editRow, setEditRow] = useState<Edit>(null)
   const [deleteOpen, setDeleteOpen] = useState(false)
-  const [deleteRow, setDeleteRow] = useState<number | null>()
+  const [deleteRow, setDeleteRow] = useState<number | null>(null)
   const axiosPrivate = useAxiosPrivate()
 
   const handleSubmit = async (value: InitialValues) => {
@@ -120,7 +120,7 @@ const ProductTypes = () => {
     <>
       <div className="users">
         <div className="info">
-          <h1>Type de produits</h1>
+          <h1>Liste des types de produit</h1>
           <button onClick={() => setOpen(true)}>
             <FontAwesomeIcon icon={faPlus} beat />
             Ajout de type
