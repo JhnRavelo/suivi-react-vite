@@ -7,6 +7,7 @@ import { HeaderProvider } from './context/HeaderContext.tsx'
 import { ProductTypeProvider } from './context/ProductTypeContext.tsx'
 import { UserProvider } from './context/UserContext.tsx'
 import { ProductProvider } from './context/ProductContext.tsx'
+import { SuiviProvider } from './context/SuiviContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <ProductTypeProvider>
                     <UserProvider>
                         <ProductProvider>
-                            <App />
+                            <SuiviProvider>
+                                <App />
+                            </SuiviProvider>
                         </ProductProvider>
                     </UserProvider>
                 </ProductTypeProvider>
