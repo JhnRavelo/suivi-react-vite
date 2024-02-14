@@ -14,8 +14,9 @@ import { isInitialValuesProduct, isInitialValuesType } from "../../utils/verific
 import InputCHeckBox from "./InputCheckBox";
 import useProductType from "../../hooks/useProductType";
 import useUser from "../../hooks/useUser";
+import { Suivi } from "../../context/SuiviContext";
 
-type Edit = ProductType | null | User | Product
+export type Edit = ProductType | null | User | Product | Suivi
 
 export type InitialValues = InitialValuesType | InitialValuesUser | initialValuesProduct
 
@@ -155,4 +156,3 @@ const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, 
 
 export default AddForm
 
-export type { Edit }
