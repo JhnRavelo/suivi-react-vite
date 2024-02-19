@@ -121,7 +121,7 @@ const ProductTypes = () => {
       <div className="users">
         <div className="info">
           <h1>Liste des types de produit</h1>
-          <button onClick={() => setOpen(true)}>
+          <button className="addButton" onClick={() => setOpen(true)}>
             <FontAwesomeIcon icon={faPlus} beat />
             Ajout de type
           </button>

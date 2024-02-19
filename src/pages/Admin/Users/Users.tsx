@@ -174,7 +174,7 @@ const Users = () => {
             <div className="users">
                 <div className="info">
                     <h1>Liste des utilisateurs</h1>
-                    <button onClick={() => setOpen(true)}>
+                    <button className="addButton" onClick={() => setOpen(true)}>
                         <FontAwesomeIcon icon={faUserPlus} beat />
                         Ajout d'utilisateur
                     </button>
