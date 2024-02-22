@@ -11,6 +11,7 @@ import useProduct from "../../hooks/useProduct"
 import { ProductType } from "../../context/ProductTypeContext"
 import { User } from "../../context/UserContext"
 import useSuvi from "../../hooks/useSuvi"
+import useProblem from "../../hooks/useProblem"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -19,6 +20,7 @@ const Admin = () => {
   const userContext = useUser()
   const productContext = useProduct()
   const suiviContext = useSuvi()
+  const problemContext = useProblem()
 
   useEffect(() => {
     fetchData()
@@ -42,7 +44,7 @@ const Admin = () => {
       const fetchUsers = await axiosPrivate.get("/auth/getAll")
       if (fetchUsers.data.success) {
         userContext?.setUsers(fetchUsers.data.users)
-        const checkboxUsers = fetchUsers.data.users.map((item: User)=>{
+        const checkboxUsers = fetchUsers.data.users.map((item: User) => {
           return item.name
         })
         userContext?.setCheckboxUser(checkboxUsers)
@@ -52,8 +54,12 @@ const Admin = () => {
         productContext?.setProducts(fetchProducts.data.products)
       }
       const fetchSuivis = await axiosPrivate.get("/suivi/getAll")
-      if(fetchSuivis.data.success){
+      if (fetchSuivis.data.success) {
         suiviContext?.setSuivis(fetchSuivis.data.suivis)
+      }
+      const fetchProblems = await axiosPrivate.get("/problem/getAll")
+      if (fetchProblems.data.success) {
+        problemContext?.setProblems(fetchProblems.data.problems)
       }
     } catch (error) {
       console.log(error)
