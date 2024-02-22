@@ -5,6 +5,7 @@ import ProductType from '../pages/Admin/ProductType/ProductType'
 import Users from '../pages/Admin/Users/Users'
 import Products from '../pages/Admin/Products/Products'
 import Suivis from '../pages/Admin/Suivis/Suivis'
+import Problems from '../pages/Admin/Problems/Problems'
 
 const AdminRouter = () => {
   return (
@@ -12,6 +13,7 @@ const AdminRouter = () => {
       <Route element={<Home />} path='/' />
       <Route element={<ProductTypes />} path='/type' />
       <Route element={<ProductType />} path='/type/:id' />
+      <Route element={<Problems />} path='/problem/:id' />
       <Route element={<Users />} path='/user' />
       <Route element={<Products />} path='/product' />
       <Route element={<Suivis />} path='/suivi' />
