@@ -15,8 +15,9 @@ import InputCHeckBox from "./InputCheckBox";
 import useProductType from "../../hooks/useProductType";
 import useUser from "../../hooks/useUser";
 import { Suivi } from "../../context/SuiviContext";
+import { Problem } from "../../context/ProblemContext";
 
-export type Edit = ProductType | null | User | Product | Suivi
+export type Edit = ProductType | null | User | Product | Suivi | Problem
 
 export type InitialValues = InitialValuesType | InitialValuesUser | initialValuesProduct
 
@@ -124,7 +125,7 @@ const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, 
 
                                 else {
                                     return (
-                                        <div className="item" key={index}>
+                                        <div className="item" key={index} style={slug == "problème" ? { width: "100%" } : {}}>
                                             <label>{column.headerName}</label>
                                             <Field
                                                 type={column.type}
