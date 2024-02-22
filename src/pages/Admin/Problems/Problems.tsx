@@ -79,7 +79,6 @@ const Problems = () => {
                     setEditRow(null)
                 }
             } else {
-                console.log("Submit")
                 const res = await axiosPrivate.post("/problem", formData)
                 if (res.data.success) {
                     problemContext?.setProblems(res.data.problems)
@@ -106,13 +105,19 @@ const Problems = () => {
                     <hr />
                     <div className="details">
                         <h3 >La liste des problèmes lié à ce type de ménuiserie</h3>
-                        {problemContext?.problemsByType &&
-                            problemContext.problemsByType.map((item, index) => (
-                                <div className="item" key={index} >
-                                    <FontAwesomeIcon icon={faEdit} className="icon" />
-                                    <p>{item.name}</p>
-                                </div>
-                            ))}
+                        <div className="problemContainer">
+                            {problemContext?.problemsByType &&
+                                problemContext.problemsByType.map((item, index) => (
+                                    <div className="item" key={index} >
+                                        <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => {
+                                            setEditRow(item);
+                                            setOpen(true)
+                                        }}
+                                        />
+                                        <p>{item.name}</p>
+                                    </div>
+                                ))}
+                        </div>
                     </div>
                     {/* {data && (
                         <div className="chart">
