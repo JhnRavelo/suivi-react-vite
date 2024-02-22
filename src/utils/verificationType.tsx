@@ -7,10 +7,20 @@ import { InitialValuesType } from "../pages/Admin/ProductTypes/ProductTypes";
 import { Product } from "../context/ProductContext";
 import { Row } from "../components/DataTable/DataTable";
 import { Suivi } from "../context/SuiviContext";
+import { Problem } from "../context/ProblemContext";
+import { InitialValuesProblem } from "../pages/Admin/Problems/Problems";
 
 export function isProductType(obj: Edit): obj is ProductType {
     if (obj) {
         return obj && typeof obj === 'object' && 'pdf' in obj;
+    } else {
+        return false
+    }
+}
+
+export function isProblem(obj: Edit): obj is Problem {
+    if (obj) {
+        return obj && typeof obj === 'object' && 'productTypeId' in obj;
     } else {
         return false
     }
@@ -34,6 +44,10 @@ export function isInitialValuesUser(obj: InitialValues): obj is InitialValuesUse
 
 export function isInitialValuesProduct(obj: InitialValues): obj is initialValuesProduct {
     return obj && typeof obj === 'object' && 'type' in obj;
+}
+
+export function isInitialValuesProblem(obj: InitialValues): obj is InitialValuesProblem {
+    return obj && typeof obj === 'object' && 'name' in obj;
 }
 
 export function isProduct(obj: Edit): obj is Product {
