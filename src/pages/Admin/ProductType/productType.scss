@@ -41,15 +41,20 @@
       font-size: 23px;
       font-weight: 500;
     }
+    .problemContainer {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
 
     .item {
-      margin: 20px 60px;
+      margin: 15px 60px;
       display: flex;
       align-items: center;
       gap: 20px;
       flex-direction: row;
+      width: 220px;
       .icon {
-        width: 35px;
         cursor: pointer;
       }
     }

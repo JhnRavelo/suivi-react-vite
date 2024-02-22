@@ -11,12 +11,12 @@ const ProductType = () => {
     const newPlugin = defaultLayoutPlugin()
     const productTypeContext = useProductType()
     const { id } = useParams()
-    useEffect(()=>{
-        if(productTypeContext?.types){
-            const type = productTypeContext.types.filter(item=>item.id.toString() == id)
+    useEffect(() => {
+        if (productTypeContext?.types) {
+            const type = productTypeContext.types.filter(item => item.id.toString() == id)
             productTypeContext.setType(type[0])
         }
-    },[productTypeContext, id])
+    }, [productTypeContext, id])
 
     return (
         <div className="product">
@@ -27,6 +27,7 @@ const ProductType = () => {
                             <h1>{productTypeContext?.type?.name}</h1>
                         </div>
                     </div>
+                    <hr />
                     {productTypeContext?.type?.pdf && <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
                         <div style={{ height: "500px", width: "1000px", position: "absolute", left: "25%" }}>
                             <Viewer fileUrl={productTypeContext?.type?.pdf} plugins={[newPlugin]} />
