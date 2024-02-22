@@ -29,6 +29,7 @@ type DataTableProps = {
 type RenderCellParams = {
     row: Row
 }
+
 type Colums = {
     field: string;
     headerName: string;
@@ -56,6 +57,11 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
     const handleSingle = (item: ProductType) => {
         productTypeContext?.setType(item)
         navigate(`/admin/type/${item.id}`)
+    }
+
+    const handleProblem = (item: ProductType) => {
+        productTypeContext?.setType(item)
+        navigate(`/admin/problem/${item.id}`)
     }
 
     const handlePrint = (item: Row) => {
@@ -88,13 +94,13 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                         <img src={faDelete} alt="" />
                     </div>
                     {slug == "type" && isProductType(params.row) && params.row?.pdf && (
-                        <div onClick={() => handleSingle(params.row as ProductType)} style={{ paddingTop: "5px" }}>
+                        <div onClick={() => handleSingle(params.row)} style={{ paddingTop: "5px" }}>
                             <img src={faPDF} alt="" style={{ width: "20px", height: "20px", objectFit: "cover" }} />
                         </div>
                     )}
                     {
                         slug === "type" && (
-                            <div style={{ paddingTop: "4px" }}>
+                            <div style={{ paddingTop: "4px" }} onClick={() => handleProblem(params.row)}>
                                 <img src={faProblem} alt="" style={{ width: "25px", height: "25px", borderRadius: "5px" }} />
                             </div>
                         )
