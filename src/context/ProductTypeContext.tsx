@@ -1,14 +1,15 @@
 import { createContext, useState } from "react"
 import { ProviderProps } from "./AuthContext"
+import { CheckBox } from "../components/Form/Form"
 
-type ProductType = {
+export type ProductType = {
     id: number
     name?: string
     createdAt: string | undefined
     pdf?: string | undefined
 }
 
-type ProductTypes = ProductType[]
+export type ProductTypes = ProductType[]
 
 type ProductTypeValue = {
     types: ProductTypes | [] | undefined
@@ -16,7 +17,7 @@ type ProductTypeValue = {
     type: ProductType | null
     setType: React.Dispatch<React.SetStateAction<ProductType | null>>
     checkboxTypes: string[] | null
-    setCheckboxTypes: React.Dispatch<React.SetStateAction<string[] | null>>
+    setCheckboxTypes: CheckBox
 }
 
 const ProductTypeContext = createContext<ProductTypeValue | null>(null)
@@ -43,4 +44,3 @@ export default ProductTypeContext
 
 export { ProductTypeProvider }
 
-export type { ProductTypes, ProductType }

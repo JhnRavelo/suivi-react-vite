@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import { ProviderProps } from "./AuthContext";
+import { CheckBox } from "../components/Form/Form";
 
 type User = {
     connected?: boolean
@@ -18,7 +19,7 @@ type UserContextValue = {
     user: null | User
     setUser: React.Dispatch<React.SetStateAction<User | null>>
     checkboxUser: string[] | null
-    setCheckboxUser: React.Dispatch<React.SetStateAction<string[] | null>>
+    setCheckboxUser: CheckBox
 }
 
 const UserContext = createContext<UserContextValue | null>(null)

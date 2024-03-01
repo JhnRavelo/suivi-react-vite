@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { ProviderProps } from "./AuthContext";
 
-type ProductValue = {
+export type ProductValue = {
     products: Products | []
     setProducts: React.Dispatch<React.SetStateAction<Products | []>>
 }
@@ -24,10 +24,10 @@ type Products = Product[]
 
 const ProductContext = createContext<ProductValue | null>(null)
 
-const ProductProvider = ({children}: ProviderProps) => {
+const ProductProvider = ({ children }: ProviderProps) => {
     const [products, setProducts] = useState<[] | Products>([])
     return (
-        <ProductContext.Provider value={{products, setProducts}} >
+        <ProductContext.Provider value={{ products, setProducts }} >
             {children}
         </ProductContext.Provider>
     )
@@ -35,6 +35,6 @@ const ProductProvider = ({children}: ProviderProps) => {
 
 export default ProductContext
 
-export {ProductProvider}
+export { ProductProvider }
 
-export type {Product, Products}
+export type { Product, Products }
