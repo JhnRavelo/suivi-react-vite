@@ -1,12 +1,12 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Fragment, useEffect, useState } from "react";
-import { ProductType } from "../../context/ProductTypeContext";
+import { ProductType, ProductTypes } from "../../context/ProductTypeContext";
 import { Colums } from "../DataTable/DataTable"
 import { InitialValuesType } from "../../pages/Admin/ProductTypes/ProductTypes";
 import * as Yup from "yup"
 import "./form.scss"
 import InputFile from "./InputFile";
-import { User } from "../../context/UserContext";
+import { User, Users } from "../../context/UserContext";
 import { InitialValuesUser } from "../../pages/Admin/Users/Users";
 import { Product } from "../../context/ProductContext";
 import { initialValuesProduct } from "../../pages/Admin/Products/Products";
@@ -15,7 +15,10 @@ import InputCHeckBox from "./InputCheckBox";
 import useProductType from "../../hooks/useProductType";
 import useUser from "../../hooks/useUser";
 import { Suivi } from "../../context/SuiviContext";
-import { Problem } from "../../context/ProblemContext";
+import { Problem, Problems } from "../../context/ProblemContext";
+import useExtractId from "../../hooks/useExtractId";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useCheckBox from "../../hooks/useCheckBox";
 
 export type Edit = ProductType | null | User | Product | Suivi | Problem
 
@@ -39,13 +42,40 @@ type AddFormProps = {
         type: "";
         dimension: undefined;
     }, "">
-    handleSubmit: (value: InitialValues) => void
+    setState: Dispatch
+    url: URL
+    data: Data
+    setCheckbox?: CheckBox
 }
 
-const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, editRow, handleSubmit }: AddFormProps) => {
+export type Data = "users" | "products" | "types" | "problems"
+
+export type URL = "/auth/user" | "/product" | "/productType" | "/problem"
+
+export type Dispatch = React.Dispatch<React.SetStateAction<Users | []>> |
+    undefined | React.Dispatch<React.SetStateAction<ProductTypes | []>> |
+    React.Dispatch<React.SetStateAction<[] | Problems>>
+
+export type CheckBox = React.Dispatch<React.SetStateAction<string[] | null>>
+
+const AddForm = ({ setOpen,
+    setEditRow,
+    slug,
+    columns,
+    validate,
+    initialValues,
+    editRow,
+    setState,
+    url,
+    data,
+    setCheckbox
+}: AddFormProps) => {
     const [formTitle, setFormTitle] = useState<string | null>(null)
     const productTypeContext = useProductType()
     const userContext = useUser()
+    const extract = useExtractId()
+    const axiosPrivate = useAxiosPrivate()
+    const checkBox = useCheckBox()
 
     useEffect(() => {
         (() => {
@@ -56,6 +86,50 @@ const AddForm = ({ setOpen, setEditRow, slug, columns, validate, initialValues, 
             }
         })()
     }, [editRow, initialValues])
+
+    const handleSubmit = async (values: InitialValues) => {
+
+        const entries = Object.entries(values)
+        const formData = new FormData()
+
+        entries.forEach(([key, value]) => {
+            if ((key == "tech" || key == "type") && isInitialValuesProduct(values)) {
+                const compare = values[key] ? values[key] : null
+                if (compare) {
+                    const id = extract(compare[0], key)
+                    formData.append(key, `${id}`)
+                }
+            } else formData.append(key, value)
+
+        })
+        if (editRow) {
+            formData.append("id", editRow.id.toString())
+            let res
+
+            if (slug == "type") {
+                res = await axiosPrivate.put(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
+            } else res = await axiosPrivate.put(url, formData)
+
+            if (res.data.success && setState) {
+                setState(res.data[data])
+                checkBox(setCheckbox, res.data[data])
+                setEditRow(null)
+                setOpen(false)
+            }
+
+        } else {
+            let res
+            if (slug == "type") {
+                res = await axiosPrivate.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } })
+            } else res = await axiosPrivate.post(url, formData)
+
+            if (res.data.success && setState) {
+                setState(res.data[data])
+                checkBox(setCheckbox, res.data[data])
+                setOpen(false)
+            }
+        }
+    }
 
     return (
         <div className="add">
