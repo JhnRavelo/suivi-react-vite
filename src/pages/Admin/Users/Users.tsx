@@ -3,13 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import "../ProductTypes/productTypes.scss"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
-import AddForm, { Edit, InitialValues } from "../../../components/Form/Form"
+import AddForm, { Edit } from "../../../components/Form/Form"
 import { validateUser, validateUserUpdate } from "../../../utils/validationSchemas"
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 import useUser from "../../../hooks/useUser"
-import { User } from "../../../context/UserContext"
-import { isInitialValuesUser } from "../../../utils/verificationType"
+import { isUser } from "../../../utils/verificationType"
 
 type InitialValuesUser = {
     name?: string
@@ -33,7 +31,6 @@ const Users = () => {
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [deleteRow, setDeleteRow] = useState<number | null>(null)
-    const axiosPrivate = useAxiosPrivate()
 
     const columns: Colums = [
         {
@@ -110,65 +107,6 @@ const Users = () => {
         },
     ]
 
-    const handleSubmit = async (value: InitialValues) => {
-        if (isInitialValuesUser(value)) {
-            try {
-                const formData = new FormData()
-                if (value.name) {
-                    formData.append("name", value.name)
-                }
-                if (value.password) {
-                    formData.append("password", value.password)
-                }
-                if (value.phone) {
-                    formData.append("phone", value.phone.toString())
-                }
-                if (value.email) {
-                    formData.append("email", value.email)
-                }
-                if (editRow) {
-                    formData.append("id", editRow.id.toString())
-                    const res = await axiosPrivate.post("/auth/update", formData)
-                    if (res.data.success) {
-                        userContext?.setUsers(res.data.users)
-                        setEditRow(null)
-                        setOpen(false)
-                    }
-                } else {
-                    const res = await axiosPrivate.post("/auth/add", formData)
-                    if (res.data.success) {
-                        userContext?.setUsers(res.data.users)
-                        setOpen(false)
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-
-    }
-
-    const handleDelete = async () => {
-        try {
-            const res = await axiosPrivate.delete(`/auth/${deleteRow}`)
-            if (res.data.success) {
-                userContext?.setUsers(res.data.users)
-                setDeleteOpen(false)
-                setDeleteRow(null)
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    function isUser(obj: Edit): obj is User {
-        if (obj) {
-            return obj && typeof obj === "object" && 'email' in obj;
-        }
-        return false
-    }
-
     return (
         <>
             <div className="users">
@@ -198,7 +136,10 @@ const Users = () => {
                         setEditRow={setEditRow}
                         initialValues={isUser(editRow) ? { name: editRow?.name, email: editRow.email, phone: editRow.phone } : initialValues}
                         validate={editRow ? validateUserUpdate : validateUser}
-                        handleSubmit={handleSubmit}
+                        data={"users"}
+                        url="/auth/user"
+                        setState={userContext?.setUsers}
+                        setCheckbox={userContext?.setCheckboxUser}
                     />
                 )}
             </div>
@@ -207,7 +148,11 @@ const Users = () => {
                     setDeleteOpen={setDeleteOpen}
                     setDeleteRow={setDeleteRow}
                     title="cet utilisateur"
-                    handleDelete={handleDelete}
+                    deleteRow={deleteRow}
+                    data="users"
+                    setState={userContext?.setUsers}
+                    setCheckBox={userContext?.setCheckboxUser}
+                    url="/auth/user"
                 />
             )}
         </>

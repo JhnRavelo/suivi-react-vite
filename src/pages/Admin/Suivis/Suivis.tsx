@@ -157,18 +157,6 @@ const Suivis = () => {
                     setDeleteRow={setDeleteRow}
                 />
 
-                {/* {open && (
-        <AddForm
-            slug="utilisateur"
-            columns={columns}
-            setOpen={setOpen}
-            editRow={editRow}
-            setEditRow={setEditRow}
-            initialValues={isUser(editRow) ? { name: editRow?.name, email: editRow.email, phone: editRow.phone } : initialValues}
-            validate={editRow ? validateUserUpdate : validateUser}
-            handleSubmit={handleSubmit}
-        />
-    )} */}
             </div>
             {deleteOpen && (
                 <ModalDelete
