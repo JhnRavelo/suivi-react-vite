@@ -13,16 +13,17 @@ import "../ProductType/productType.scss";
 import { useEffect, useState } from "react";
 import useProductType from "../../../hooks/useProductType";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
-import AddForm, { Edit, InitialValues } from "../../../components/Form/Form";
+import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import AddForm, { Edit } from "../../../components/Form/Form";
 import { Colums } from "../../../components/DataTable/DataTable";
 import { validateType } from "../../../utils/validationSchemas";
-import { isInitialValuesProblem, isProblem } from "../../../utils/verificationType";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { isProblem } from "../../../utils/verificationType";
 import useProblem from "../../../hooks/useProblem";
+import ModalDelete from "../../../components/ModalDelete/ModalDelete";
 
 export type InitialValuesProblem = {
     name: string
+    productTypeId?: string
 }
 
 const columns: Colums = [
@@ -37,17 +38,20 @@ const columns: Colums = [
     },
 ]
 
-const initialValues: InitialValuesProblem = {
-    name: "",
-}
 
 const Problems = () => {
     const { id } = useParams()
     const productTypeContext = useProductType()
     const [open, setOpen] = useState<boolean>(false)
     const [editRow, setEditRow] = useState<Edit>(null)
-    const axiosPrivate = useAxiosPrivate()
+    const [deleteRow, setDeleteRow] = useState<number | null>(null)
+    const [deleteOpen, setDeleteOpen] = useState(false)
     const problemContext = useProblem()
+
+    const initialValues: InitialValuesProblem = {
+        name: "",
+        productTypeId: id,
+    }
 
     useEffect(() => {
         if (productTypeContext?.types) {
@@ -59,35 +63,6 @@ const Problems = () => {
             problemContext.setProblemsByType(problems)
         }
     }, [id, productTypeContext, problemContext?.problems])
-
-    // useEffect(() => {
-    // }, [id, problemContext])
-
-    const handleSubmit = async (values: InitialValues) => {
-        if (isInitialValuesProblem(values)) {
-            const formData = new FormData()
-            console.log(values.name)
-            if (!id || !values.name) return
-            formData.append("productTypeId", id)
-            formData.append("name", values.name)
-            if (editRow) {
-                formData.append("id", `${editRow.id}`)
-                const res = await axiosPrivate.put("/problem", formData)
-                if (res.data.success) {
-                    problemContext?.setProblems(res.data.problems)
-                    setOpen(false)
-                    setEditRow(null)
-                }
-            } else {
-                const res = await axiosPrivate.post("/problem", formData)
-                if (res.data.success) {
-                    problemContext?.setProblems(res.data.problems)
-                    setOpen(false)
-                }
-            }
-
-        }
-    }
 
     return (
         <div className="product">
@@ -114,6 +89,10 @@ const Problems = () => {
                                             setOpen(true)
                                         }}
                                         />
+                                        <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => {
+                                            setDeleteRow(item.id)
+                                            setDeleteOpen(true)
+                                        }} />
                                         <p>{item.name}</p>
                                     </div>
                                 ))}
@@ -150,24 +129,6 @@ const Problems = () => {
                         </div>
                     )} */}
                 </div>
-                {/* <div className="activities">
-          <h2>Dernier activités</h2>
-          {activities && (
-            <ul>
-              {activities.map((activity, index) => {
-                const time = activity.time.split(":")
-                return (
-                  <li key={index}>
-                    <div>
-                      <p>{`${activity.user.name} est intéressé par ce produit`}</p>
-                      <time>{`${activity.date} ${time[0]}:${time[1]}`}</time>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div> */}
             </div>
             {open && (
                 <AddForm
@@ -178,7 +139,20 @@ const Problems = () => {
                     setEditRow={setEditRow}
                     initialValues={isProblem(editRow) && editRow ? { name: editRow.name } : initialValues}
                     validate={validateType}
-                    handleSubmit={handleSubmit}
+                    url="/problem"
+                    data="problems"
+                    setState={problemContext?.setProblems}
+                />
+            )}
+            {deleteOpen && (
+                <ModalDelete
+                    title={`ce problème`}
+                    setDeleteOpen={setDeleteOpen}
+                    setDeleteRow={setDeleteRow}
+                    setState={problemContext?.setProblems}
+                    deleteRow={deleteRow}
+                    data="problems"
+                    url="/problem"
                 />
             )}
         </div>
