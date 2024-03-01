@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import useUser from "../../hooks/useUser"
 import { isProduct } from "../../utils/verificationType"
 import { Edit } from "../Form/Form"
@@ -15,10 +15,6 @@ type PrintQRProps = {
 const PrintQR = ({ setPrintOpen, editRow, setEditRow }: PrintQRProps) => {
     const userContext = useUser()
     const printRef = useRef<HTMLDivElement | null>(null)
-
-    useEffect(()=>{
-        console.log(printRef.current)
-    },[printRef])
 
     const handlePrint = useReactToPrint({
         content: () => (printRef.current),
