@@ -1,14 +1,42 @@
 import faTrash from "../../assets/svg/delete.svg"
+import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import useCheckBox from "../../hooks/useCheckBox"
+import { CheckBox, Data, Dispatch, URL } from "../Form/Form"
 import "./modalDelete.scss"
 
 type ModalDeleteProps = {
-    title: string
-    setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>
-    handleDelete: () => Promise<void>
+  title: string
+  setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>
+  deleteRow: number | null
+  data: Data
+  url: URL
+  setState: Dispatch
+  setCheckBox?: CheckBox
 }
 
-const ModalDelete = ({title, setDeleteOpen, setDeleteRow, handleDelete}: ModalDeleteProps) => {
+const ModalDelete = ({ title, setDeleteOpen, setDeleteRow, deleteRow, setState, data, url, setCheckBox }: ModalDeleteProps) => {
+  const axiosPrivate = useAxiosPrivate()
+  const checkBox = useCheckBox()
+
+  const handleDelete = async () => {
+    try {
+      const res = await axiosPrivate.delete(`${url}/${deleteRow}`)
+      if (res.data.success) {
+        if (setState) {
+          setState(res.data[data])
+          if (setCheckBox) {
+            checkBox(setCheckBox, res.data[data])
+          }
+          setDeleteOpen(false)
+          setDeleteRow(null)
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -33,7 +61,7 @@ const ModalDelete = ({title, setDeleteOpen, setDeleteRow, handleDelete}: ModalDe
           </p>
           <div className="button__delete">
             <button className="suppr" onClick={() => handleDelete()}>
-              Delete
+              Confirmez
             </button>
             <button
               className="cancel"
@@ -42,7 +70,7 @@ const ModalDelete = ({title, setDeleteOpen, setDeleteRow, handleDelete}: ModalDe
                 setDeleteRow(null);
               }}
             >
-              Cancel
+              Annuler
             </button>
           </div>
         </div>
