@@ -4,21 +4,19 @@ import { ProviderProps } from "./AuthContext";
 type HeaderContextValue = {
     years: string[]
     setYears: React.Dispatch<React.SetStateAction<string[]>>
-    year: string | number
-    setYear: React.Dispatch<React.SetStateAction<number | string>>
+    year: NbrStrUn
+    setYear: React.Dispatch<React.SetStateAction<NbrStrUn>>
     notifs: string[]
     setNotifs: React.Dispatch<React.SetStateAction<string[]>>
 }
+
+export type NbrStrUn = number | string | undefined
 
 const HeaderContext = createContext<null | HeaderContextValue>(null)
 
 const HeaderProvider = ({ children }: ProviderProps) => {
     const [years, setYears] = useState<Array<string>>([])
-    const [year, setYear] = useState<number | string>(() => {
-        const date = new Date();
-        const year = date.getFullYear();
-        return year;
-    })
+    const [year, setYear] = useState<NbrStrUn>()
     const [notifs, setNotifs] = useState<string[]>([])
     return (
         <HeaderContext.Provider value={{ years, setYear, year, setYears, notifs, setNotifs }}>

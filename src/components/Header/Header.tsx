@@ -10,25 +10,25 @@ import useLogout from "../../hooks/useLogout"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 
 const Header = () => {
-  // const {pathname} = useLocation()
+  const { pathname } = useLocation()
   const headerContext = useHeader()
   const [notifNbr, setnotifNbr] = useState(headerContext?.notifs.length)
   const authContext = useAuth()
   const logout = useLogout()
   const axiosPrivate = useAxiosPrivate()
-  // const chevronRef = useRef<SVGSVGElement | null>(null)
-  // const selectDateRef = useRef<HTMLDivElement | null>(null)
+  const chevronRef = useRef<SVGSVGElement | null>(null)
+  const selectDateRef = useRef<HTMLDivElement | null>(null)
   const notificationRef = useRef<HTMLDivElement | null>(null)
 
-  // const handleVisibleSelecteYear = () => {
-  //   selectDateRef.current?.classList.toggle("visible");
-  //   chevronRef.current?.classList.toggle("up");
-  // };
+  const handleVisibleSelecteYear = () => {
+    selectDateRef.current?.classList.toggle("visible");
+    chevronRef.current?.classList.toggle("up");
+  };
 
   const handleShowNotication = async () => {
     notificationRef.current?.classList.toggle("showed");
     try {
-      const res = await axiosPrivate.get("/log/read")
+      const res = await axiosPrivate.get("/log/readLog")
       if (res.data.success) {
         setnotifNbr(0)
       }
@@ -37,11 +37,11 @@ const Header = () => {
     }
   }
 
-  // const handleClickYear = (value: string | number) => {
-  //   headerContext?.setYear(value);
-  //   selectDateRef.current?.classList.toggle("visible");
-  //   chevronRef.current?.classList.toggle("up");
-  // };
+  const handleClickYear = (value: string | number) => {
+    headerContext?.setYear(value);
+    selectDateRef.current?.classList.toggle("visible");
+    chevronRef.current?.classList.toggle("up");
+  };
 
   useEffect(() => {
     if (headerContext?.notifs && headerContext?.notifs.length > 0) {
@@ -55,11 +55,10 @@ const Header = () => {
         <img src={logoEuro} alt="logo" />
         <span>{"Europ'Alu"}</span>
       </div>
-      {/* {(pathname == "/admin/" || pathname.includes("/admin/product/")) && (
+      {(pathname == "/admin/" || pathname.includes("/admin/product/") || headerContext?.years?.length !== 0) && (
         <div className="date">
           <div className="selected__date">
             <h2 onClick={handleVisibleSelecteYear}>Année {headerContext?.year}</h2>
-
             <FontAwesomeIcon
               ref={chevronRef}
               className="chevron"
@@ -67,31 +66,35 @@ const Header = () => {
               onClick={handleVisibleSelecteYear}
             />
           </div>
-          <div ref={selectDateRef} className="setect__date">
-                  {headerContext?.years.length !== 0 &&
-                    headerContext?.years.map((item, index) => (
-                      <label
-                        key={index}
-                        onClick={() => handleClickYear(item)}
-                      >
-                        <input name="year" type="radio" value={item} />
-                        année {item}
-                      </label>
-                    ))}
-          </div>
+          {headerContext?.years?.length
+            && headerContext?.years?.length > 1 && (
+              <div ref={selectDateRef} className="setect__date">
+                {headerContext?.years.map((item, index) => (
+                  <label
+                    key={index}
+                    onClick={() => handleClickYear(item)}
+                  >
+                    <input name="year" type="radio" value={item} />
+                    année {item}
+                  </label>
+                ))}
+              </div>
+            )}
         </div>
-      )} */}
+      )}
       <div className="icons">
         <div ref={notificationRef} className="log">
-          {headerContext?.notifs && headerContext.notifs.map((notif, index) => (
-            <Link to="/admin/log" key={index}>
-              <div className="journal" onClick={handleShowNotication}>
-                <div>
-                  <h2>{notif.split(";")[0]}</h2>
+          <div className="content">
+            {headerContext?.notifs && headerContext.notifs.map((notif, index) => (
+              <Link to="/admin/log" key={index}>
+                <div className="journal" onClick={handleShowNotication}>
+                  <div>
+                    <h2>{notif.split(";")[0]}</h2>
+                  </div>
+                  <h2 className="date">{notif.split(";")[1]}</h2>
                 </div>
-                <h2 className="date">{notif.split(";")[1]}</h2>
-              </div>
-            </Link>))}
+              </Link>))}
+          </div>
         </div>
         <div className="notification" onClick={handleShowNotication}>
           {notifNbr == 0 ? (
