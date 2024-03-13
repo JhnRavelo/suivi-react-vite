@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { useEffect, useRef } from "react"
 import faEdit from "../../assets/svg/view.svg"
@@ -94,13 +95,13 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                         <img src={faDelete} alt="" />
                     </div>
                     {slug == "type" && isProductType(params.row) && params.row?.pdf && (
-                        <div onClick={() => handleSingle(params.row)} style={{ paddingTop: "5px" }}>
+                        <div onClick={() => handleSingle(params.row)}>
                             <img src={faPDF} alt="" style={{ width: "20px", height: "20px", objectFit: "cover" }} />
                         </div>
                     )}
                     {
                         slug === "type" && (
-                            <div style={{ paddingTop: "4px" }} onClick={() => handleProblem(params.row)}>
+                            <div onClick={() => handleProblem(params.row)}>
                                 <img src={faProblem} alt="" style={{ width: "25px", height: "25px", borderRadius: "5px" }} />
                             </div>
                         )
@@ -120,20 +121,28 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
     }
 
     useEffect(() => {
-        if (tableRef.current?.querySelector("button")) {
-            if (slug == "type") {
+        setTimeout(() => {
+            if (tableRef.current?.querySelector("button")) {
                 const btn = tableRef.current.querySelector("button")
-                if (btn) {
-                    btn.style.display = "none"
+                if (slug == "type" || slug == "user") {
+                    if (btn) {
+                        btn.style.opacity = "0";
+                        btn.style.pointerEvents = "none";
+                    }
+                } else {
+                    if (btn) {
+                        btn.style.opacity = "1";
+                        btn.style.pointerEvents = "all";
+                    }
                 }
             }
-        }
+        }, 1000);
 
-    }, [slug, tableRef])
+    }, [tableRef.current, slug])
 
     return (
         <div className="dataTable">
-            {rows && <DataGrid
+            {rows && rows?.length > 0 && <DataGrid
                 className="dataGrid"
                 ref={tableRef}
                 rows={rows}
