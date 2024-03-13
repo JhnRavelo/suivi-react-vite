@@ -14,7 +14,7 @@ import { isInitialValuesProduct, isInitialValuesType } from "../../utils/verific
 import InputCHeckBox from "./InputCheckBox";
 import useProductType from "../../hooks/useProductType";
 import useUser from "../../hooks/useUser";
-import { Suivi } from "../../context/SuiviContext";
+import { Suivi, Suivis } from "../../context/SuiviContext";
 import { Problem, Problems } from "../../context/ProblemContext";
 import useExtractId from "../../hooks/useExtractId";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -48,13 +48,14 @@ type AddFormProps = {
     setCheckbox?: CheckBox
 }
 
-export type Data = "users" | "products" | "types" | "problems"
+export type Data = "users" | "products" | "types" | "problems" | "suivis"
 
-export type URL = "/auth/user" | "/product" | "/productType" | "/problem"
+export type URL = "/auth/user" | "/product" | "/productType" | "/problem" | "/suivi/delete"
 
 export type Dispatch = React.Dispatch<React.SetStateAction<Users | []>> |
     undefined | React.Dispatch<React.SetStateAction<ProductTypes | []>> |
-    React.Dispatch<React.SetStateAction<[] | Problems>>
+    React.Dispatch<React.SetStateAction<[] | Problems>> | 
+    React.Dispatch<React.SetStateAction<Suivis | []>>
 
 export type CheckBox = React.Dispatch<React.SetStateAction<string[] | null>>
 
