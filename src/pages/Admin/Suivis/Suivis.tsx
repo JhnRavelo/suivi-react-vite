@@ -4,8 +4,6 @@ import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 import useSuvi from "../../../hooks/useSuvi"
 import { isSuivi } from "../../../utils/verificationType"
 import "../ProductTypes/productTypes.scss"
-import "./suivis.scss"
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 const columns: Colums = [
     {
@@ -68,7 +66,7 @@ const columns: Colums = [
         inputMode: "text",
         headerName: "Problème",
         placeholder: "choisir le fichier PDF",
-        width: 150,
+        width: 200,
         disableExport: false
     },
     {
@@ -77,7 +75,7 @@ const columns: Colums = [
         inputMode: "text",
         headerName: "Solution",
         placeholder: "La date",
-        width: 150,
+        width: 200,
         disableExport: false,
     },
     {
@@ -90,16 +88,28 @@ const columns: Colums = [
         disableExport: false,
         renderCell: (params) => {
             if (isSuivi(params.row)) {
-                const array = params.row.observation.split(";")
-                const imgs = array[1].split(",")
+                const array = params.row.observation?.split(";")
+                const imgs = array[1]?.split(",")
                 return (
                     <div>
-                        <p>{array[0]}</p>
-                        <div className="galleryContainer">
-                            {imgs.map((gallery, index) => (
-                                <img src={gallery} alt="" key={index} className="imgprod" />
-                            ))}
-                        </div>
+                        {array[0] && <p style={{marginBottom: "5px"}}>{array[0]}</p>}
+                        {(imgs.length && imgs[0] != "") &&
+                            <section id='portfolio'>
+                                <div className='row portfolio-content'>
+                                    <div id='folio-wrap' className='bricks-wrapper'>
+                                        <div className="galleryContainer">
+                                            {imgs.map((gallery, index) => (
+                                                <div key={index} className='brick folio-item'>
+                                                    <a data-fancybox={`gallery${params.row.id}`} href={gallery}>
+                                                        <img src={gallery} alt="" key={index} className="imgprod" />
+                                                    </a>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        }
                     </div>
                 )
             } else {
@@ -122,26 +132,8 @@ const columns: Colums = [
 
 const Suivis = () => {
     const suiviContext = useSuvi()
-    const axiosPrivate = useAxiosPrivate()
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false)
     const [deleteRow, setDeleteRow] = useState<null | number>(null)
-
-    const handleDelete = async () => {
-        try {
-            const formData = new FormData()
-            if (deleteRow) {
-                formData.append("deleteId", deleteRow?.toString())
-            }
-            const res = await axiosPrivate.post("/suivi/delete", formData)
-            if (res.data.success) {
-                setDeleteRow(null)
-                suiviContext?.setSuivis(res.data.suivis)
-                setDeleteOpen(false)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     return (
         <>
@@ -162,8 +154,11 @@ const Suivis = () => {
                 <ModalDelete
                     setDeleteOpen={setDeleteOpen}
                     setDeleteRow={setDeleteRow}
-                    title="cet utilisateur"
-                    handleDelete={handleDelete}
+                    title="ce suivi"
+                    data="suivis"
+                    url="/suivi/delete"
+                    deleteRow={deleteRow}
+                    setState={suiviContext?.setSuivis}
                 />
             )}
         </>
