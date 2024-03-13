@@ -9,7 +9,32 @@ import { Row } from "../components/DataTable/DataTable";
 import { Suivi } from "../context/SuiviContext";
 import { Problem } from "../context/ProblemContext";
 import { InitialValuesProblem } from "../pages/Admin/Problems/Problems";
+import { User } from "../context/UserContext";
 
+
+export function isInitialValuesType(obj: InitialValues): obj is InitialValuesType {
+    return obj && typeof obj === 'object' && 'pdf' in obj;
+}
+
+export function isInitialValuesUser(obj: InitialValues): obj is InitialValuesUser {
+    return obj && typeof obj === 'object' && 'email' in obj;
+}
+
+export function isInitialValuesProduct(obj: InitialValues): obj is initialValuesProduct {
+    return obj && typeof obj === 'object' && 'type' in obj;
+}
+
+export function isInitialValuesProblem(obj: InitialValues): obj is InitialValuesProblem {
+    return obj && typeof obj === 'object' && 'name' in obj;
+}
+
+export function isProduct(obj: Edit): obj is Product {
+    if (obj) {
+        return obj && typeof obj === "object" && "type" in obj;
+    } else {
+        return false
+    }
+}
 export function isProductType(obj: Edit): obj is ProductType {
     if (obj) {
         return obj && typeof obj === 'object' && 'pdf' in obj;
@@ -34,28 +59,11 @@ export function isSuivi(obj: Row): obj is Suivi {
     }
 }
 
-export function isInitialValuesType(obj: InitialValues): obj is InitialValuesType {
-    return obj && typeof obj === 'object' && 'pdf' in obj;
-}
-
-export function isInitialValuesUser(obj: InitialValues): obj is InitialValuesUser {
-    return obj && typeof obj === 'object' && 'email' in obj;
-}
-
-export function isInitialValuesProduct(obj: InitialValues): obj is initialValuesProduct {
-    return obj && typeof obj === 'object' && 'type' in obj;
-}
-
-export function isInitialValuesProblem(obj: InitialValues): obj is InitialValuesProblem {
-    return obj && typeof obj === 'object' && 'name' in obj;
-}
-
-export function isProduct(obj: Edit): obj is Product {
+export function isUser(obj: Edit): obj is User {
     if (obj) {
-        return obj && typeof obj === "object" && 'type' in obj;
-    } else {
-        return false
+        return obj && typeof obj === "object" && 'email' in obj;
     }
+    return false
 }
 
 
