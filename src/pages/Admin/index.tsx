@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react"
 import Header from "../../components/Header/Header"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
@@ -24,7 +25,6 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchData = async () => {
@@ -56,13 +56,19 @@ const Admin = () => {
       const fetchSuivis = await axiosPrivate.get("/suivi/getAll")
       if (fetchSuivis.data.success) {
         suiviContext?.setSuivis(fetchSuivis.data.suivis)
+        headerContext?.setYears(fetchSuivis.data.years)
+        headerContext?.setYear(fetchSuivis.data.years[fetchSuivis.data.years.length - 1])
       }
       const fetchProblems = await axiosPrivate.get("/problem/getAll")
       if (fetchProblems.data.success) {
         problemContext?.setProblems(fetchProblems.data.problems)
       }
+      const stat = await axiosPrivate.get("/suivi/getStat")
+      if (stat.data.success) {
+        problemContext?.setStatProblems(stat.data.statProblems)
+      }
     } catch (error) {
-      console.log(error)
+      console.log("ERROR FETCHDATA INDEX ADMIN", error)
     }
   }
 

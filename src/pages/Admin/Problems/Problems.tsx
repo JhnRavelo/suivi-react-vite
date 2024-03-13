@@ -1,13 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// import {
-//     Legend,
-//     Line,
-//     LineChart,
-//     ResponsiveContainer,
-//     Tooltip,
-//     XAxis,
-//     YAxis,
-// } from "recharts";
 import { useParams } from "react-router-dom";
 import "../ProductType/productType.scss";
 import { useEffect, useState } from "react";
@@ -20,6 +11,10 @@ import { validateType } from "../../../utils/validationSchemas";
 import { isProblem } from "../../../utils/verificationType";
 import useProblem from "../../../hooks/useProblem";
 import ModalDelete from "../../../components/ModalDelete/ModalDelete";
+import ChartPie from "../../../components/PieChart/ChartPie";
+import "../Home/home.scss"
+import useHeader from "../../../hooks/useHeader";
+import generateColor from "../../../utils/generateColor";
 
 export type InitialValuesProblem = {
     name: string
@@ -38,6 +33,7 @@ const columns: Colums = [
     },
 ]
 
+const initialChartData = [{ name: "", value: 0, color: "#fff" },]
 
 const Problems = () => {
     const { id } = useParams()
@@ -46,7 +42,9 @@ const Problems = () => {
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteRow, setDeleteRow] = useState<number | null>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
+    const [chartData, setChartData] = useState(initialChartData)
     const problemContext = useProblem()
+    const headerContext = useHeader()
 
     const initialValues: InitialValuesProblem = {
         name: "",
@@ -62,12 +60,25 @@ const Problems = () => {
             const problems = problemContext.problems.filter(item => item.productTypeId.toString() == id)
             problemContext.setProblemsByType(problems)
         }
-    }, [id, productTypeContext, problemContext?.problems])
+        if (problemContext?.statProblems) {
+            const statProblemCurrentYear = problemContext.statProblems.
+                filter(item => item.year == headerContext?.year && item.productTypeId.toString() == id)
+            const chartDataProblem = statProblemCurrentYear.map(item => {
+                const color = generateColor()
+                return {
+                    name: item.name,
+                    value: item.count,
+                    color: color
+                }
+            })
+            setChartData(chartDataProblem)
+        }
+    }, [id, productTypeContext, problemContext?.problems, headerContext?.year, problemContext?.statProblems])
 
     return (
-        <div className="product">
-            <div className="single">
-                <div className="view">
+        <div className="product" style={{ display: 'flex', }}>
+            <div className="single" style={{ flex: 3 }}>
+                <div className="view" style={{ width: "100%" }}>
                     <div className="info">
                         <div className="topInfo">
                             <h1>{productTypeContext?.type?.name}</h1>
@@ -98,37 +109,10 @@ const Problems = () => {
                                 ))}
                         </div>
                     </div>
-                    {/* {data && (
-                        <div className="chart">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <LineChart
-                                    width={500}
-                                    height={300}
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                >
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    {chart.dataKeys.map((dataKey, index) => (
-                                        <Line
-                                            key={index}
-                                            type="monotone"
-                                            dataKey={dataKey.name}
-                                            stroke={dataKey.color}
-                                        />
-                                    ))}
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-                    )} */}
                 </div>
+            </div>
+            <div className="box" style={{ flex: 2 }}>
+                <ChartPie chartData={chartData} />
             </div>
             {open && (
                 <AddForm
