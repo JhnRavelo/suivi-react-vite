@@ -21,7 +21,10 @@ const ModalDelete = ({ title, setDeleteOpen, setDeleteRow, deleteRow, setState, 
 
   const handleDelete = async () => {
     try {
-      const res = await axiosPrivate.delete(`${url}/${deleteRow}`)
+      let res
+      if (data == "suivis") {
+        res = await axiosPrivate.post(`${url}`, { deleteId: deleteRow })
+      } else res = await axiosPrivate.delete(`${url}/${deleteRow}`)
       if (res.data.success) {
         if (setState) {
           setState(res.data[data])
