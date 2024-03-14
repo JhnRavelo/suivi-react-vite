@@ -9,6 +9,7 @@ import { UserProvider } from './context/UserContext.tsx'
 import { ProductProvider } from './context/ProductContext.tsx'
 import { SuiviProvider } from './context/SuiviContext.tsx'
 import { ProblemProvider } from './context/ProblemContext.tsx'
+import { HomeProvider } from './context/HomeContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
@@ -19,7 +20,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                         <ProductProvider>
                             <SuiviProvider>
                                 <ProblemProvider>
-                                    <App />
+                                    <HomeProvider>
+                                        <App />
+                                    </HomeProvider>
                                 </ProblemProvider>
                             </SuiviProvider>
                         </ProductProvider>
