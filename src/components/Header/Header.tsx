@@ -84,7 +84,7 @@ const Header = () => {
       )}
       <div className="icons">
         <div ref={notificationRef} className="log">
-          <div className="content">
+          <div className="scrollContent">
             {headerContext?.notifs && headerContext.notifs.map((notif, index) => (
               <Link to="/admin/log" key={index}>
                 <div className="journal" onClick={handleShowNotication}>
@@ -93,7 +93,8 @@ const Header = () => {
                   </div>
                   <h2 className="date">{notif.split(";")[1]}</h2>
                 </div>
-              </Link>))}
+              </Link>
+            ))}
           </div>
         </div>
         <div className="notification" onClick={handleShowNotication}>
