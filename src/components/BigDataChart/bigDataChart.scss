@@ -1,0 +1,29 @@
+@import "../../pages/Admin/responsive.scss";
+@import "../../pages/Admin/variables.scss";
+
+.bigChartBox{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .custom-tooltipBig {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: $main-bg;
+    border: 2px solid $soft-bg;
+    color: var(--orange);
+
+  }
+
+  h1{
+    @include xxl{
+      font-size: 24px;
+    }
+  }
+  .chart{
+    width: 100%;
+    height: 300px;
+  }
+}
