@@ -1,5 +1,6 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import "./chartPie.scss";
+import { useEffect, useState } from "react";
 
 type CharPieProps = {
     chartData: CharData[]
@@ -12,6 +13,18 @@ interface CharData {
 }
 
 const ChartPie = ({ chartData }: CharPieProps) => {
+    const [total, setTotal] = useState(0)
+    useEffect(() => {
+        if (chartData) {
+            console.log(chartData)
+            let i = 0
+            chartData.forEach(item => {
+                i = i + item.value
+            })
+            setTotal(i)
+        }
+    }, [chartData])
+
     return (
         <div className="pieChartBox">
             <h1>Pourcentage Problème</h1>
@@ -42,7 +55,7 @@ const ChartPie = ({ chartData }: CharPieProps) => {
                             <div className="dot" style={{ backgroundColor: item.color }} />
                             <span>{item.name.split(" ").length > 1 ? `${item.name.split(" ")[0][0]}. ${item.name.split(" ")[1]}` : `${item.name.split(" ")[0]}`}</span>
                         </div>
-                        <span>{item.value}</span>
+                        <span style={{ color: item.color }}>{total > 0 ? Math.floor((item.value / total) * 100) : null}%</span>
                     </div>
                 ))}
             </div>
