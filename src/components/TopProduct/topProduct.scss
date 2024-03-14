@@ -1,0 +1,96 @@
+@import "../../pages/Admin/responsive.scss";
+@import "../../pages/Admin/variables.scss";
+
+.topBox {
+    h1 {
+        text-align: center;
+        font-size: 27px;
+        margin-bottom: 20px;
+
+        @include xxl {
+            font-size: 24px;
+        }
+    }
+
+    .list {
+        overflow: hidden;
+        height: 70vh;
+        .listItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: $soft-bg 2px solid;
+
+            .user {
+                display: flex;
+                gap: 20px;
+                width: 79%;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                    object-fit: fill;
+
+                    @include xxl {
+                        display: none;
+                    }
+                    @include lg {
+                        display: block;
+                    }
+                }
+
+                .userTexts {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    width: 100%;
+
+                    .productCategorie {
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                    .email {
+                        font-size: 12px;
+                        width: 80%;
+
+                        @include xxl {
+                            display: none;
+                        }
+                        @include lg {
+                            display: block;
+                        }
+                    }
+                    .problemContainer {
+                        display: flex;
+                        .problemLabel {
+                            font-size: 12px;
+                            width: 30%;
+                        }
+                        .problemList {
+                            flex: 1;
+                            display: flex;
+                            flex-direction: column;
+                            .problem {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+            .total {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+                .title {
+                    font-size: 24px;
+                }
+                .amount {
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+}
