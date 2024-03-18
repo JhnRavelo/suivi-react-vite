@@ -14,6 +14,7 @@ import { User } from "../../context/UserContext"
 import useSuvi from "../../hooks/useSuvi"
 import useProblem from "../../hooks/useProblem"
 import useHome from "../../hooks/useHome"
+import useLog from "../../hooks/useLog"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -24,6 +25,7 @@ const Admin = () => {
   const suiviContext = useSuvi()
   const problemContext = useProblem()
   const homeContext = useHome()
+  const logContext = useLog()
 
   useEffect(() => {
     fetchData()
@@ -34,6 +36,7 @@ const Admin = () => {
       const fetchLogs = await axiosPrivate.get("/log")
       if (fetchLogs.data.success) {
         headerContext?.setNotifs(fetchLogs.data.logs)
+        logContext?.setLogs(fetchLogs.data.allLogs)
       }
       const fetchProductTypes = await axiosPrivate.get("/productType/getAll")
       if (fetchProductTypes.data.success) {
@@ -70,6 +73,7 @@ const Admin = () => {
         problemContext?.setStatProblems(stat.data.statProblems)
         homeContext?.setStatTop(stat.data.statTop)
         homeContext?.setStatSuivis(stat.data.statSuivis)
+        homeContext?.setStatProductTypes(stat.data.statProductTypes)
       }
     } catch (error) {
       console.log("ERROR FETCHDATA INDEX ADMIN", error)
