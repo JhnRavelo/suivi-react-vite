@@ -18,13 +18,13 @@ export type Suivi = {
 export type Suivis = Suivi[]
 
 type SuiviContextValue = {
-    suivis: Suivis | []
-    setSuivis: React.Dispatch<React.SetStateAction<Suivis | []>>
+    suivis: Suivis
+    setSuivis: React.Dispatch<React.SetStateAction<Suivis>>
 }
 const SuiviContext = createContext<SuiviContextValue | null>(null)
 
 const SuiviProvider = ({children}:ProviderProps) => {
-    const [suivis, setSuivis] = useState<Suivis | []>([])
+    const [suivis, setSuivis] = useState<Suivis>([])
     return (
         <SuiviContext.Provider value={{suivis, setSuivis}}>
             {children}

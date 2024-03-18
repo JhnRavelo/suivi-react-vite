@@ -16,23 +16,23 @@ type StatProblem = {
     productTypeId: number
 }
 
-type StatProblems = StatProblem[]
+export type StatProblems = StatProblem[]
 
 type ProblemValue = {
-    problems: Problems | [] | undefined
-    setProblems: React.Dispatch<React.SetStateAction<Problems | []>>
-    problemsByType: Problems | [] | undefined
-    setProblemsByType: React.Dispatch<React.SetStateAction<Problems | []>>
+    problems: Problems
+    setProblems: React.Dispatch<React.SetStateAction<Problems>>
+    problemsByType: Problems
+    setProblemsByType: React.Dispatch<React.SetStateAction<Problems>>
     statProblems: StatProblems
-    setStatProblems: React.Dispatch<React.SetStateAction<[] | StatProblems>>
+    setStatProblems: React.Dispatch<React.SetStateAction<StatProblems>>
 }
 
 const ProblemContext = createContext<ProblemValue | null>(null)
 
 const ProblemProvider = ({ children }: ProviderProps) => {
-    const [problems, setProblems] = useState<[] | Problems>([])
-    const [problemsByType, setProblemsByType] = useState<[] | Problems>([])
-    const [statProblems, setStatProblems] = useState<StatProblems | []>([])
+    const [problems, setProblems] = useState<Problems>([])
+    const [problemsByType, setProblemsByType] = useState<Problems>([])
+    const [statProblems, setStatProblems] = useState<StatProblems>([])
     return (
         <ProblemContext.Provider value={{
             problems, setProblems, problemsByType, setProblemsByType, statProblems, setStatProblems

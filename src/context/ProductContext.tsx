@@ -2,8 +2,8 @@ import { createContext, useState } from "react";
 import { ProviderProps } from "./AuthContext";
 
 export type ProductValue = {
-    products: Products | []
-    setProducts: React.Dispatch<React.SetStateAction<Products | []>>
+    products: Products
+    setProducts: React.Dispatch<React.SetStateAction<Products>>
 }
 
 type Product = {
@@ -25,7 +25,7 @@ type Products = Product[]
 const ProductContext = createContext<ProductValue | null>(null)
 
 const ProductProvider = ({ children }: ProviderProps) => {
-    const [products, setProducts] = useState<[] | Products>([])
+    const [products, setProducts] = useState<Products>([])
     return (
         <ProductContext.Provider value={{ products, setProducts }} >
             {children}

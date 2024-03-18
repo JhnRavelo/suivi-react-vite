@@ -3,11 +3,11 @@ import { ProviderProps } from "./AuthContext";
 
 type HomeContextValue = {
     statTop: StatTops
-    setStatTop: React.Dispatch<React.SetStateAction<StatTops | []>>
+    setStatTop: React.Dispatch<React.SetStateAction<StatTops>>
     statSuivis: StatSuivis
-    setStatSuivis: React.Dispatch<React.SetStateAction<[] | StatSuivis>>
+    setStatSuivis: React.Dispatch<React.SetStateAction<StatSuivis>>
     statProductTypes: StatProductTypes
-    setStatProductTypes: React.Dispatch<React.SetStateAction<[] | StatProductTypes>>
+    setStatProductTypes: React.Dispatch<React.SetStateAction<StatProductTypes>>
 }
 
 type HomeContextProblems = {
