@@ -11,10 +11,10 @@ import { validateType } from "../../../utils/validationSchemas";
 import { isProblem } from "../../../utils/verificationType";
 import useProblem from "../../../hooks/useProblem";
 import ModalDelete from "../../../components/ModalDelete/ModalDelete";
-import ChartPie from "../../../components/PieChart/ChartPie";
+import ChartPie, { PieCharData } from "../../../components/PieChart/ChartPie";
 import "../Home/home.scss"
 import useHeader from "../../../hooks/useHeader";
-import generateColor from "../../../utils/generateColor";
+import getPieChart from "../../../utils/getPieChart";
 
 export type InitialValuesProblem = {
     name: string
@@ -33,8 +33,6 @@ const columns: Colums = [
     },
 ]
 
-const initialChartData = [{ name: "", value: 0, color: "#fff" },]
-
 const Problems = () => {
     const { id } = useParams()
     const productTypeContext = useProductType()
@@ -42,7 +40,7 @@ const Problems = () => {
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteRow, setDeleteRow] = useState<number | null>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
-    const [chartData, setChartData] = useState(initialChartData)
+    const [chartData, setChartData] = useState<PieCharData>()
     const problemContext = useProblem()
     const headerContext = useHeader()
 
@@ -60,20 +58,16 @@ const Problems = () => {
             const problems = problemContext.problems.filter(item => item.productTypeId.toString() == id)
             problemContext.setProblemsByType(problems)
         }
-        if (problemContext?.statProblems) {
+    }, [id, productTypeContext, problemContext?.problems])
+
+    useEffect(() => {
+        if (problemContext?.statProblems && headerContext?.year) {
             const statProblemCurrentYear = problemContext.statProblems.
                 filter(item => item.year == headerContext?.year && item.productTypeId.toString() == id)
-            const chartDataProblem = statProblemCurrentYear.map(item => {
-                const color = generateColor()
-                return {
-                    name: item.name,
-                    value: item.count,
-                    color: color
-                }
-            })
-            setChartData(chartDataProblem)
+            const statProblem = getPieChart(statProblemCurrentYear)
+            setChartData(statProblem)
         }
-    }, [id, productTypeContext, problemContext?.problems, headerContext?.year, problemContext?.statProblems])
+    }, [headerContext?.year, problemContext?.statProblems])
 
     return (
         <div className="product" style={{ display: 'flex', }}>
