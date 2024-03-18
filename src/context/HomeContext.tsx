@@ -2,10 +2,12 @@ import { createContext, useState } from "react";
 import { ProviderProps } from "./AuthContext";
 
 type HomeContextValue = {
-    statTop: StatProblems
-    setStatTop: React.Dispatch<React.SetStateAction<StatProblems | []>>
+    statTop: StatTops
+    setStatTop: React.Dispatch<React.SetStateAction<StatTops | []>>
     statSuivis: StatSuivis
     setStatSuivis: React.Dispatch<React.SetStateAction<[] | StatSuivis>>
+    statProductTypes: StatProductTypes
+    setStatProductTypes: React.Dispatch<React.SetStateAction<[] | StatProductTypes>>
 }
 
 type HomeContextProblems = {
@@ -24,7 +26,7 @@ type StatSuivi = {
 
 export type StatSuivis = StatSuivi[]
 
-type StatProblem = {
+type StatTop = {
     id: number
     productCount: number
     year: number
@@ -35,15 +37,23 @@ type StatProblem = {
     problems: HomeContextProblems
 }
 
+export type StatProductType = {
+    year: number
+    count: number
+    name: string
+}
+
+export type StatProductTypes = StatProductType[]
+export type StatTops = StatTop[]
+
 const HomeContext = createContext<HomeContextValue | null>(null)
 
-export type StatProblems = StatProblem[]
-
 const HomeProvider = ({ children }: ProviderProps) => {
-    const [statTop, setStatTop] = useState<StatProblems | []>([])
-    const [statSuivis, setStatSuivis] = useState<StatSuivis | []>([])
+    const [statTop, setStatTop] = useState<StatTops>([])
+    const [statSuivis, setStatSuivis] = useState<StatSuivis>([])
+    const [statProductTypes, setStatProductTypes] = useState<StatProductTypes>([])
     return (
-        <HomeContext.Provider value={{ statTop, setStatTop, statSuivis, setStatSuivis }}>
+        <HomeContext.Provider value={{ statTop, setStatTop, statSuivis, setStatSuivis, statProductTypes, setStatProductTypes }}>
             {children}
         </HomeContext.Provider>
     )
