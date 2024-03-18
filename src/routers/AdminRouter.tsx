@@ -6,6 +6,7 @@ import Users from '../pages/Admin/Users/Users'
 import Products from '../pages/Admin/Products/Products'
 import Suivis from '../pages/Admin/Suivis/Suivis'
 import Problems from '../pages/Admin/Problems/Problems'
+import Log from '../pages/Admin/Logs/Logs'
 
 const AdminRouter = () => {
   return (
@@ -17,6 +18,7 @@ const AdminRouter = () => {
       <Route element={<Users />} path='/user' />
       <Route element={<Products />} path='/product' />
       <Route element={<Suivis />} path='/suivi' />
+      <Route element={<Log />} path='/log' />
     </Routes>
   )
 }
