@@ -19,10 +19,9 @@ const ChartPie = ({ chartData }: CharPieProps) => {
 
     useEffect(() => {
         if (chartData) {
-            console.log(chartData)
             let i = 0
-            chartData.forEach(item => {
-                i = i + item.value
+            chartData.map(item => {
+                i += item.value
             })
             setTotal(i)
         }
@@ -45,8 +44,8 @@ const ChartPie = ({ chartData }: CharPieProps) => {
                                 paddingAngle={5}
                                 dataKey="value"
                             >
-                                {chartData.map((item) => (
-                                    <Cell key={item.name} fill={item.color} />
+                                {chartData.map((item, index) => (
+                                    <Cell key={index} fill={item.color} />
                                 ))}
                             </Pie>
                         </PieChart>
@@ -54,19 +53,19 @@ const ChartPie = ({ chartData }: CharPieProps) => {
                 </div>
                 <div className="options" style={pathname == "/admin" ? { height: "25vh", marginTop: "-15vh" } : { height: "15vh" }} >
                     <div className="scrollContent content">
-                        {chartData.map((item) => {
+                        {chartData.map((item, index) => {
                             return (
-                                <>
-                                    <div className="option" key={item.name}>
-                                        <div className="title">
-                                            <div className="dot" style={{ backgroundColor: item.color }} />
-                                            <span>{item.name.split(" ").length > 1 ? `${item.name.split(" ")[0].length < item.name.split(" ")[1].length ? item.name.split(" ")[0]
-                                                + " " + item.name.split(" ")[1][0].toUpperCase() + "." : item.name.split(" ")[0][0].toUpperCase() + ". " + item.name.split(" ")[1]}`
-                                                : `${item.name.split(" ")[0]}`}</span>
-                                        </div>
-                                        <span style={{ color: item.color }}>{total > 0 ? Math.floor((item.value / total) * 100) : null}%</span>
+                                <div className="option" key={index}>
+                                    <div className="title">
+                                        <div className="dot" style={{ backgroundColor: item.color }} />
+                                        <span>{item.name.split(" ").length > 1 ? `${item.name.split(" ")[0].length
+                                            < item.name.split(" ")[1].length ? item.name.split(" ")[0]
+                                            + " " + item.name.split(" ")[1][0].toUpperCase() + "." :
+                                            item.name.split(" ")[0][0].toUpperCase() + ". " + item.name.split(" ")[1]}`
+                                            : `${item.name.split(" ")[0]}`}</span>
                                     </div>
-                                </>
+                                    <span style={{ color: item.color }}>{total > 0 ? Math.floor((item.value / total) * 100) : null}%</span>
+                                </div>
                             )
                         })}
                     </div>
