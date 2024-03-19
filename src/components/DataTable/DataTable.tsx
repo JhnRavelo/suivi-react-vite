@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import faEdit from "../../assets/svg/view.svg"
 import faDelete from "../../assets/svg/delete.svg"
 import faPDF from "../../assets/png/pdf.png"
@@ -15,9 +15,11 @@ import { Products } from "../../context/ProductContext"
 import { isProduct, isProductType } from "../../utils/verificationType"
 import { Suivi, Suivis } from "../../context/SuiviContext"
 import { Edit } from "../Form/Form"
+import faExcel from "../../assets/png/xls.png"
+import { utils, writeFileXLSX } from "xlsx";
 
 type DataTableProps = {
-    rows: ProductTypes | [] | undefined | Users | Products | Suivis
+    rows: ProductTypes | undefined | Users | Products | Suivis
     slug: "type" | "user" | "product" | "suivi"
     columns: Colums
     setOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -45,9 +47,10 @@ type Colums = {
 export type Row = ProductType | User | Suivi
 
 const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, setDeleteRow, setPrintOpen }: DataTableProps) => {
-    const tableRef = useRef<HTMLDivElement>(null)
+    const imgRef = useRef<HTMLImageElement>(null)
     const productTypeContext = useProductType()
     const navigate = useNavigate()
+    const [filter, setFilter] = useState(null)
 
     const handleEdit = (item: Row) => {
         if (setOpen && setEditRow) {
@@ -59,19 +62,16 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
         productTypeContext?.setType(item)
         navigate(`/admin/type/${item.id}`)
     }
-
     const handleProblem = (item: ProductType) => {
         productTypeContext?.setType(item)
         navigate(`/admin/problem/${item.id}`)
     }
-
     const handlePrint = (item: Row) => {
         if (setPrintOpen && setEditRow) {
             setEditRow(item)
             setPrintOpen(true)
         }
     }
-
     const handleDelete = (id: number) => {
         if (setDeleteOpen && setDeleteRow) {
             setDeleteRow(id)
@@ -79,8 +79,40 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
         }
     }
 
-    const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf" && item.field != "confirmPassword"))
+    const handleExportToExcel = async () => {
+        if (filter && rows) {
+            const filterEntries = Object.entries(filter)
+            const filterRows = await Promise.all(rows?.map(item => {
+                const row: { [key: string]: string } = {};
+                const itemEntries = Object.entries(item);
+                filterEntries.forEach(([key, value]) => {
+                    if (key == item.id.toString() && value == true) {
+                        itemEntries.forEach(([key, value]) => {
+                            const matchingColumn = columns.find(col => col.field === key);
+                            if (matchingColumn && value) {
+                                if (matchingColumn.field == "observation" && typeof value == "string") {
+                                    row[matchingColumn.headerName] = value.split(";")[0];
+                                } else {
+                                    row[matchingColumn.headerName] = value.toString();
+                                }
+                            }
+                        });
+                    }
+                });
 
+                return row;
+            }))
+                .then(items => items.filter(item => Object.keys(item).length > 0))
+                .catch(err => console.log(err));
+            if (filterRows) {
+                const wb = utils.book_new();
+                utils.book_append_sheet(wb, utils.json_to_sheet(filterRows));
+                writeFileXLSX(wb, `${slug}.xlsx`);
+            }
+        }
+    }
+
+    const filterColumns = columns.filter(item => (item.field !== "password" && item.field != "pdf" && item.field != "confirmPassword"))
     const actionColumn = {
         field: "action",
         headerName: "Action",
@@ -88,32 +120,29 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
         renderCell: (params: RenderCellParams) => {
             return (
                 <div className="action">
-                    {slug !== "suivi" && <div onClick={() => handleEdit(params.row)}>
-                        <img src={faEdit} alt="" />
-                    </div>}
+                    {slug !== "suivi" && (
+                        <div onClick={() => handleEdit(params.row)}>
+                            <img src={faEdit} alt="" />
+                        </div>
+                    )}
                     <div className="delete" onClick={() => handleDelete(params.row.id)}>
                         <img src={faDelete} alt="" />
                     </div>
-                    {slug == "type" && isProductType(params.row) && params.row?.pdf && (
+                    {slug === "type" && isProductType(params.row) && params.row?.pdf && (
                         <div onClick={() => handleSingle(params.row)}>
                             <img src={faPDF} alt="" style={{ width: "20px", height: "20px", objectFit: "cover" }} />
                         </div>
                     )}
-                    {
-                        slug === "type" && (
-                            <div onClick={() => handleProblem(params.row)}>
-                                <img src={faProblem} alt="" style={{ width: "25px", height: "25px", borderRadius: "5px" }} />
-                            </div>
-                        )
-
-                    }
-                    {slug == "product" && isProduct(params.row) && (
-                        <div onClick={() => handlePrint(params.row)}  >
+                    {slug === "type" && (
+                        <div onClick={() => handleProblem(params.row)}>
+                            <img src={faProblem} alt="" style={{ width: "25px", height: "25px", borderRadius: "5px" }} />
+                        </div>
+                    )}
+                    {slug === "product" && isProduct(params.row) && (
+                        <div onClick={() => handlePrint(params.row)}>
                             <img src={faQRCode} alt="" style={{ objectFit: "contain" }} />
                         </div>
-                    )
-
-                    }
+                    )}
                 </div>
             );
         },
@@ -122,8 +151,8 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
 
     useEffect(() => {
         setTimeout(() => {
-            if (tableRef.current?.querySelector("button")) {
-                const btn = tableRef.current.querySelector("button")
+            if (imgRef.current) {
+                const btn = imgRef.current
                 if (slug == "type" || slug == "user") {
                     if (btn) {
                         btn.style.opacity = "0";
@@ -136,15 +165,15 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                     }
                 }
             }
-        }, 1000);
+        }, 1);
 
-    }, [tableRef.current, slug])
+    }, [imgRef.current, slug])
 
     return (
         <div className="dataTable">
+            <img src={faExcel} ref={imgRef} alt="Image Excel" className="button-export" onClick={() => handleExportToExcel()} />
             {rows && rows?.length > 0 && <DataGrid
                 className="dataGrid"
-                ref={tableRef}
                 rows={rows}
                 columns={
                     [...filterColumns, actionColumn]
@@ -163,10 +192,7 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                         showQuickFilter: true,
                         quickFilterProps: { debounceMs: 500 },
                         csvOptions: { disableToolbarButton: true },
-                        printOptions: {
-                            hideFooter: true,
-                            hideToolbar: true,
-                        },
+                        printOptions: { disableToolbarButton: true },
                     },
                 }}
                 pageSizeOptions={[slug == "suivi" ? 5 : 7]}
@@ -174,6 +200,7 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
                 disableColumnFilter
                 disableDensitySelector
                 disableColumnSelector
+                onStateChange={(item) => setFilter(item.filter.filteredRowsLookup)}
             />}
         </div>
     )
