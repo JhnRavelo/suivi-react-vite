@@ -55,7 +55,7 @@ const Header = () => {
         <img src={logoEuro} alt="logo" />
         <span>{"Europ'Alu"}</span>
       </div>
-      {(pathname == "/admin/" || pathname.includes("/admin/product/") || headerContext?.years?.length !== 0) && (
+      {((pathname == "/admin" || pathname.includes("/admin/problem/")) && headerContext?.years?.length !== 0) && (
         <div className="date">
           <div className="selected__date">
             <h2 onClick={handleVisibleSelecteYear}>Année {headerContext?.year}</h2>
