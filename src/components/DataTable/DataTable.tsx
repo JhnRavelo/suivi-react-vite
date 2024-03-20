@@ -78,7 +78,6 @@ const DataTable = ({ rows, slug, columns, setOpen, setEditRow, setDeleteOpen, se
             setDeleteOpen(true)
         }
     }
-
     const handleExportToExcel = async () => {
         if (filter && rows) {
             const filterEntries = Object.entries(filter)

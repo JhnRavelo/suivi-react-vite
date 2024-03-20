@@ -8,6 +8,7 @@ import useHeader from "../../hooks/useHeader"
 import "./header.scss"
 import useLogout from "../../hooks/useLogout"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import faExport from '../../assets/svg/exportation.svg'
 
 const Header = () => {
   const { pathname } = useLocation()
@@ -42,6 +43,20 @@ const Header = () => {
     selectDateRef.current?.classList.toggle("visible");
     chevronRef.current?.classList.toggle("up");
   };
+
+  const handleExport = async () => {
+    try {
+      const res = await axiosPrivate.get("/data/export", { responseType: "blob" })
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'export.sequelize');
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     if (headerContext?.notifs && headerContext?.notifs.length > 0) {
@@ -96,6 +111,9 @@ const Header = () => {
               </Link>
             ))}
           </div>
+        </div>
+        <div className="notification" onClick={handleExport}>
+          <img src={faExport} alt="import icon" className="icon" />
         </div>
         <div className="notification" onClick={handleShowNotication}>
           {notifNbr == 0 ? (
