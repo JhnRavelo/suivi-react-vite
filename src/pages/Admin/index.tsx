@@ -29,7 +29,7 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [headerContext?.isImport])
 
   const fetchData = async () => {
     try {
