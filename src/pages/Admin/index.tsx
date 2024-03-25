@@ -15,6 +15,7 @@ import useSuvi from "../../hooks/useSuvi"
 import useProblem from "../../hooks/useProblem"
 import useHome from "../../hooks/useHome"
 import useLog from "../../hooks/useLog"
+import useSave from "../../hooks/useSave"
 
 const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -26,6 +27,7 @@ const Admin = () => {
   const problemContext = useProblem()
   const homeContext = useHome()
   const logContext = useLog()
+  const saveContext = useSave()
 
   useEffect(() => {
     fetchData()
@@ -35,6 +37,7 @@ const Admin = () => {
     try {
       const fetchLogs = await axiosPrivate.get("/log")
       if (fetchLogs.data.success) {
+        console.log("LOG", fetchLogs.data.allLogs)
         headerContext?.setNotifs(fetchLogs.data.logs)
         logContext?.setLogs(fetchLogs.data.allLogs)
       }
@@ -74,6 +77,11 @@ const Admin = () => {
         homeContext?.setStatTop(stat.data.statTop)
         homeContext?.setStatSuivis(stat.data.statSuivis)
         homeContext?.setStatProductTypes(stat.data.statProductTypes)
+      }
+      const fetchSave = await axiosPrivate.get("/data/read/export")
+      if (fetchSave.data.success) {
+        saveContext?.setSaves(fetchSave.data.files)
+        console.log(fetchSave.data.files)
       }
     } catch (error) {
       console.log("ERROR FETCHDATA INDEX ADMIN", error)
