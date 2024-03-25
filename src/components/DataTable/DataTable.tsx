@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import faEdit from "../../assets/svg/view.svg";
 import faDelete from "../../assets/svg/delete.svg";
 import faPDF from "../../assets/png/pdf.png";
@@ -17,10 +17,12 @@ import { Suivi, Suivis } from "../../context/SuiviContext";
 import { Edit } from "../Form/Form";
 import faExcel from "../../assets/png/xls.png";
 import { utils, writeFileXLSX } from "xlsx";
+import { Saves } from "../../context/SaveContext";
+import faRestore from "../../assets/png/restaurer.png"
 
 type DataTableProps = {
-  rows: ProductTypes | undefined | Users | Products | Suivis;
-  slug: "type" | "user" | "product" | "suivi";
+  rows: ProductTypes | undefined | Users | Products | Suivis | Saves;
+  slug: "type" | "user" | "product" | "suivi" | "save";
   columns: Colums;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setEditRow?: React.Dispatch<React.SetStateAction<Edit>>;
@@ -56,7 +58,6 @@ const DataTable = ({
   setDeleteRow,
   setPrintOpen,
 }: DataTableProps) => {
-  const imgRef = useRef<HTMLImageElement>(null);
   const productTypeContext = useProductType();
   const navigate = useNavigate();
   const [filter, setFilter] = useState(null);
@@ -124,7 +125,13 @@ const DataTable = ({
       }
     }
   };
+  const handleRestore = (id: number) => {
+    if(setOpen && setDeleteRow){
+      setOpen(true)
+      setDeleteRow(id)
+    }
 
+  }
   const filterColumns = columns.filter(
     (item) =>
       item.field !== "password" &&
@@ -138,20 +145,20 @@ const DataTable = ({
     renderCell: (params: RenderCellParams) => {
       return (
         <div className="action">
-          {slug !== "suivi" && (
+          {(slug !== "suivi" && slug !== "save") && (
             <div onClick={() => handleEdit(params.row)}>
-              <img src={faEdit} alt="" />
+              <img src={faEdit} alt="image de Modification" />
             </div>
           )}
-          <div className="delete" onClick={() => handleDelete(params.row.id)}>
-            <img src={faDelete} alt="" />
+          <div onClick={() => handleDelete(params.row.id)}>
+            <img src={faDelete} alt="image de Poubelle" />
           </div>
           {slug === "type" && isProductType(params.row) && params.row?.pdf && (
             <div onClick={() => handleSingle(params.row)}>
               <img
                 src={faPDF}
-                alt=""
-                style={{ width: "20px", height: "20px", objectFit: "cover" }}
+                alt="image de PDF"
+                style={{ height: "20px", objectFit: "cover" }}
               />
             </div>
           )}
@@ -159,14 +166,19 @@ const DataTable = ({
             <div onClick={() => handleProblem(params.row)}>
               <img
                 src={faProblem}
-                alt=""
+                alt="image de Warning"
                 style={{ width: "25px", height: "25px", borderRadius: "5px" }}
               />
             </div>
           )}
+          {slug === "save" && (
+            <div onClick={() => handleRestore(params.row.id)}>
+              <img src={faRestore} alt="image de Restauration" />
+            </div>
+          )}
           {slug === "product" && isProduct(params.row) && (
             <div onClick={() => handlePrint(params.row)}>
-              <img src={faQRCode} alt="" style={{ objectFit: "contain" }} />
+              <img src={faQRCode} alt="image de QR Code" style={{ objectFit: "contain" }} />
             </div>
           )}
         </div>
@@ -175,36 +187,16 @@ const DataTable = ({
     disableExport: true,
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (imgRef.current) {
-        const btn = imgRef.current;
-        if (slug == "type" || slug == "user") {
-          if (btn) {
-            btn.style.opacity = "0";
-            btn.style.pointerEvents = "none";
-          }
-        } else {
-          if (btn) {
-            btn.style.opacity = "1";
-            btn.style.pointerEvents = "all";
-          }
-        }
-      }
-    }, 1);
-  }, [imgRef.current, slug]);
-
   return (
     <div className="dataTable">
       {rows && rows?.length > 0 && (
         <>
-          <img
+          {(slug == "product" || slug == "suivi") && <img
             src={faExcel}
-            ref={imgRef}
             alt="Image Excel"
             className="button-export"
             onClick={() => handleExportToExcel()}
-          />
+          />}
           <DataGrid
             className="dataGrid"
             rows={rows}
