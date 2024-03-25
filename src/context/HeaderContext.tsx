@@ -9,8 +9,10 @@ type HeaderContextValue = {
   notifs: string[];
   setNotifs: React.Dispatch<React.SetStateAction<string[]>>;
   isImport: boolean;
-  setIsImport: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsImport: StateBool;
 };
+
+export type StateBool = React.Dispatch<React.SetStateAction<boolean>>;
 
 export type NbrStrUn = number | string | undefined;
 
