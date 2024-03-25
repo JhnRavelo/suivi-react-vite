@@ -7,6 +7,7 @@ import faUser from "../../assets/svg/profile.svg"
 import faProduct from "../../assets/svg/product.svg"
 import faSuivi from "../../assets/svg/suivi.svg"
 import faLog from "../../assets/svg/log.svg"
+import faSave from "../../assets/svg/base-de-donnees.svg"
 
 const Menu = () => {
   return (
@@ -32,12 +33,16 @@ const Menu = () => {
         </Link>
         <span className="title">LISTES</span>
         <Link to="/admin/suivi" className="listItem">
-          <img src={faSuivi} alt="" style={{ width: "20px", height: "20px" }} />
+          <img src={faSuivi} alt="" className="img" />
           <span className="listItemTitle">Suivis</span>
         </Link>
         <Link to="/admin/log" className="listItem">
-          <img src={faLog} alt="" style={{ width: "20px", height: "20px" }} />
+          <img src={faLog} alt="" className="img" />
           <span className="listItemTitle">Journals</span>
+        </Link>
+        <Link to="/admin/save" className="listItem">
+          <img src={faSave} alt="" className="img" />
+          <span className="listItemTitle">Save</span>
         </Link>
       </div>
     </div>
