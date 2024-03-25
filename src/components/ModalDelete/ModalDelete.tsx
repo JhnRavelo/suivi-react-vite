@@ -1,45 +1,65 @@
-import faTrash from "../../assets/svg/delete.svg"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
-import useCheckBox from "../../hooks/useCheckBox"
-import { CheckBox, Data, Dispatch, URL } from "../Form/Form"
-import "./modalDelete.scss"
+import faTrash from "../../assets/png/poubelle.png";
+import faRestore from "../../assets/png/restaurer.png";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import useCheckBox from "../../hooks/useCheckBox";
+import { CheckBox, Data, Dispatch, URL } from "../Form/Form";
+import "./modalDelete.scss";
+import { isStateBool } from "../../utils/verificationType";
+import useSave from "../../hooks/useSave";
 
 type ModalDeleteProps = {
-  title: string
-  setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>
-  setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>
-  deleteRow: number | null
-  data: Data
-  url: URL
-  setState: Dispatch
-  setCheckBox?: CheckBox
-}
+  title: string;
+  setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteRow: React.Dispatch<React.SetStateAction<number | null>>;
+  deleteRow: number | null;
+  data: Data;
+  url: URL;
+  setState: Dispatch;
+  setCheckBox?: CheckBox;
+  modal?: "delete" | "restore";
+};
 
-const ModalDelete = ({ title, setDeleteOpen, setDeleteRow, deleteRow, setState, data, url, setCheckBox }: ModalDeleteProps) => {
-  const axiosPrivate = useAxiosPrivate()
-  const checkBox = useCheckBox()
+const ModalDelete = ({
+  title,
+  setDeleteOpen,
+  setDeleteRow,
+  deleteRow,
+  setState,
+  data,
+  url,
+  setCheckBox,
+  modal,
+}: ModalDeleteProps) => {
+  const axiosPrivate = useAxiosPrivate();
+  const checkBox = useCheckBox();
+  const saveContext = useSave();
 
   const handleDelete = async () => {
     try {
-      let res
+      let res;
       if (data == "suivis") {
-        res = await axiosPrivate.post(`${url}`, { deleteId: deleteRow })
-      } else res = await axiosPrivate.delete(`${url}/${deleteRow}`)
+        res = await axiosPrivate.post(`${url}`, { deleteId: deleteRow });
+      } else if (data == "files") {
+        const file = saveContext?.saves.find((item) => item.id == deleteRow);
+        res = await axiosPrivate.post(`${url}`, { file: file });
+      } else res = await axiosPrivate.delete(`${url}/${deleteRow}`);
       if (res.data.success) {
+        console.log("SUCCESS")
         if (setState) {
-          setState(res.data[data])
+          if (modal == "restore" && isStateBool(setState)) {
+            setState((prev: boolean) => !prev);
+          } else setState(res.data[data]);
           if (setCheckBox) {
-            checkBox(setCheckBox, res.data[data])
+            checkBox(setCheckBox, res.data[data]);
           }
-          setDeleteOpen(false)
-          setDeleteRow(null)
+          setDeleteOpen(false);
+          setDeleteRow(null);
         }
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -56,14 +76,27 @@ const ModalDelete = ({ title, setDeleteOpen, setDeleteRow, deleteRow, setState, 
             X
           </div>
           <div className="modal__trash">
-            <img src={faTrash} alt="" />
+            <img
+              src={modal == "restore" ? faRestore : faTrash}
+              alt="image de modal"
+            />
           </div>
-          <h1 className="delete__h1">Suppression</h1>
+          <h1 className="delete__h1">
+            {modal == "restore" ? "Restauration" : "Suppression"}
+          </h1>
           <p className="delete__p">
-            Êtes-vous sûr de vouloir supprimer {title} ?
+            {modal == "restore"
+              ? "Êtes-vous sûr de vouloir restaurer vers cet date ?"
+              : "Êtes-vous sûr de vouloir supprimer" + title + "?"}
           </p>
           <div className="button__delete">
-            <button className="suppr" onClick={() => handleDelete()}>
+            <button
+              className="suppr"
+              style={
+                modal == "restore" ? { backgroundColor: "greenyellow" } : {}
+              }
+              onClick={() => handleDelete()}
+            >
               Confirmez
             </button>
             <button
@@ -79,7 +112,7 @@ const ModalDelete = ({ title, setDeleteOpen, setDeleteRow, deleteRow, setState, 
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ModalDelete
+export default ModalDelete;

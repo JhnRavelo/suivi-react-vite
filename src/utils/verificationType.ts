@@ -1,5 +1,5 @@
 import { initialValuesProduct } from "../pages/Admin/Products/Products";
-import { Edit } from "../components/Form/Form";
+import { Dispatch, Edit } from "../components/Form/Form";
 import { ProductType } from "../context/ProductTypeContext";
 import { InitialValuesUser } from "../pages/Admin/Users/Users";
 import { InitialValues } from "../components/Form/Form";
@@ -10,6 +10,7 @@ import { Suivi } from "../context/SuiviContext";
 import { Problem } from "../context/ProblemContext";
 import { InitialValuesProblem } from "../pages/Admin/Problems/Problems";
 import { User } from "../context/UserContext";
+import { StateBool } from "../context/HeaderContext";
 
 
 export function isInitialValuesType(obj: InitialValues): obj is InitialValuesType {
@@ -64,6 +65,14 @@ export function isUser(obj: Edit): obj is User {
         return obj && typeof obj === "object" && 'email' in obj;
     }
     return false
+}
+
+export function isStateBool(obj: Dispatch): obj is StateBool {
+    if (obj && typeof obj === 'function') {
+        const hasCallOrApply = typeof obj.call === 'function' || typeof obj.apply === 'function';
+        return hasCallOrApply
+    }
+    return false;
 }
 
 
