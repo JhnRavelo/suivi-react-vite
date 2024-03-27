@@ -94,7 +94,7 @@ export type Dispatch =
     | React.Dispatch<React.SetStateAction<Saves>>
     | StateBool
 
-export type CheckBox = React.Dispatch<React.SetStateAction<string | null>>;
+export type CheckBox = React.Dispatch<React.SetStateAction<string[] | null>>;
 
 const AddForm = ({
     setOpen,

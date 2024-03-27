@@ -19,7 +19,6 @@ const InputCHeckBox = ({ type, arrays, title, name }: InputCHeckBoxProps) => {
     const typeList = typeRef.current;
     btnList?.classList.toggle("open");
     typeList?.classList.toggle("open");
-    console.log(type)
   };
   return (
     <div className="item">
