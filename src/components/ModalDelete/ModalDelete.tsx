@@ -44,7 +44,6 @@ const ModalDelete = ({
         res = await axiosPrivate.post(`${url}`, { file: file });
       } else res = await axiosPrivate.delete(`${url}/${deleteRow}`);
       if (res.data.success) {
-        console.log("SUCCESS")
         if (setState) {
           if (modal == "restore" && isStateBool(setState)) {
             setState((prev: boolean) => !prev);

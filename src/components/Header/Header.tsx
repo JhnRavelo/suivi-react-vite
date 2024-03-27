@@ -15,12 +15,14 @@ import useLogout from "../../hooks/useLogout";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import faExport from "../../assets/svg/exportation.svg";
 import faImport from "../../assets/svg/importer.svg";
+import useSave from "../../hooks/useSave";
 
 const Header = () => {
   const { pathname } = useLocation();
   const headerContext = useHeader();
   const [notifNbr, setnotifNbr] = useState(headerContext?.notifs.length);
   const authContext = useAuth();
+  const saveContext = useSave()
   const logout = useLogout();
   const axiosPrivate = useAxiosPrivate();
   const chevronRef = useRef<SVGSVGElement | null>(null);
@@ -41,7 +43,7 @@ const Header = () => {
         setnotifNbr(0);
       }
     } catch (error) {
-      console.log(error);
+      console.log("ERROR SHOW NOTIFICATION", error);
     }
   };
 
@@ -56,15 +58,16 @@ const Header = () => {
       const res = await axiosPrivate.get("/data/export", {
         responseType: "blob",
       });
-      console.log(res.data)
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "export.sequelize");
+      link.setAttribute("download", "export.zip");
       document.body.appendChild(link);
       link.click();
+      const fetchSave = await axiosPrivate.get("/data/read/export")
+      saveContext?.setSaves(fetchSave.data.files)
     } catch (error) {
-      console.log(error);
+      console.log("ERROR HANDLE EXPORT", error);
     }
   };
 
@@ -77,6 +80,7 @@ const Header = () => {
           headers: { "Content-Type": "multipart/form-data" },
         });
         if (res.data.success) {
+          console.log("IMPORT MESSAGE", res.data.message)
           headerContext?.setIsImport((prev) => !prev);
         }
       }
@@ -144,7 +148,7 @@ const Header = () => {
           type="file"
           id="import"
           ref={inputRef}
-          accept=".sequelize"
+          accept=".zip"
           style={{ display: "none" }}
           onChange={(e) => handleImport(e)}
 

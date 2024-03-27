@@ -13,10 +13,8 @@ const Log = () => {
     useEffect(() => {
         if (logContext?.logs && headerContext?.year) {
             const logPerYear = logContext.logs.filter(item => item.year == headerContext.year)
-            console.log(logPerYear)
             setList(logPerYear)
         }
-        // logRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [logContext?.logs, headerContext?.year]);
 
     return (
@@ -25,7 +23,6 @@ const Log = () => {
             <div className="log" ref={logRef}>
                 <div className="scrollContent" style={{ paddingRight: "30px" }}>
                     {list && list.map((item, index) => {
-                        console.log(item.createdAt.split(" ")[1])
                         const time = item.createdAt.split(" ")[1].split(":")
                         const date = item.createdAt.split(" ")[0]
                         return (

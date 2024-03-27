@@ -81,7 +81,6 @@ const Admin = () => {
       const fetchSave = await axiosPrivate.get("/data/read/export")
       if (fetchSave.data.success) {
         saveContext?.setSaves(fetchSave.data.files)
-        console.log(fetchSave.data.files)
       }
     } catch (error) {
       console.log("ERROR FETCHDATA INDEX ADMIN", error)

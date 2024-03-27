@@ -120,7 +120,7 @@ const Users = () => {
                 <DataTable
                     slug="user"
                     columns={columns}
-                    rows={userContext?.users}
+                    rows={userContext?.users.filter(item => item.email != null)}
                     setOpen={setOpen}
                     setEditRow={setEditRow}
                     setDeleteOpen={setDeleteOpen}
