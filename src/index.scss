@@ -24,3 +24,25 @@ body {
     box-sizing: content-box;
     height: 100%;
 }
+@keyframes tonga {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 1;
+    }
+}

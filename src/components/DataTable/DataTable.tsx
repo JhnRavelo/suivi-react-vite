@@ -126,7 +126,7 @@ const DataTable = ({
     }
   };
   const handleRestore = (id: number) => {
-    if(setOpen && setDeleteRow){
+    if (setOpen && setDeleteRow) {
       setOpen(true)
       setDeleteRow(id)
     }
@@ -188,20 +188,20 @@ const DataTable = ({
   };
 
   return (
-    <div className="dataTable">
-      {rows && rows?.length > 0 && (
-        <>
-          {(slug == "product" || slug == "suivi") && <img
-            src={faExcel}
-            alt="Image Excel"
-            className="button-export"
-            onClick={() => handleExportToExcel()}
-          />}
+    <>
+      {(slug == "product" || slug == "suivi") && rows && rows?.length > 0 && <img
+        src={faExcel}
+        alt="Image Excel"
+        className="button-export"
+        onClick={() => handleExportToExcel()}
+      />}
+      <div className="dataTable">
+        {rows && rows?.length > 0 && (
           <DataGrid
             className="dataGrid"
             rows={rows}
             columns={[...filterColumns, actionColumn]}
-            rowHeight={slug == "suivi" ? 70 : 50}
+            rowHeight={slug == "suivi" ? 60 : 50}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -225,9 +225,9 @@ const DataTable = ({
             disableColumnSelector
             onStateChange={(item) => setFilter(item.filter.filteredRowsLookup)}
           />
-        </>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

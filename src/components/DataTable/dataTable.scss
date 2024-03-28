@@ -1,19 +1,20 @@
+.button-export {
+    position: absolute;
+    width: 40px;
+    z-index: 1;
+    right: 5%;
+    top: 20%;
+    cursor: pointer;
+    transition: 0.3s ease;
+    animation: appear 2s ease;
+}
+.button-export:hover {
+    transform: scale(1.1);
+}
 .dataTable {
     box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 8px;
-    animation: tonga 0.6s ease;
+    animation: tonga 1s ease;
     max-width: 1275px;
-    .button-export {
-        position: absolute;
-        width: 40px;
-        z-index: 1;
-        right: 5%;
-        top: 20%;
-        cursor: pointer;
-        transition: 0.3s ease;
-    }
-    .button-export:hover {
-        transform: scale(1.1);
-    }
 
     .dataGrid {
         background: #f3f3f3;

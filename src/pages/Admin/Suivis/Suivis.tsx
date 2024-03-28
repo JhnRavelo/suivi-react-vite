@@ -91,8 +91,8 @@ const columns: Colums = [
                 const array = params.row.observation?.split(";")
                 const imgs = array[1]?.split(",")
                 return (
-                    <div>
-                        {array[0] && <p style={{marginBottom: "5px"}}>{array[0]}</p>}
+                    <div style={{ height: "100%" }}>
+                        {array[0] && <p style={{ marginBottom: "5px" }}>{array[0]}</p>}
                         {(imgs.length && imgs[0] != "") &&
                             <section id='portfolio'>
                                 <div className='row portfolio-content'>
