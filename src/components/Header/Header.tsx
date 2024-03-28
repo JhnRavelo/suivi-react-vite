@@ -4,18 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faChevronDown,
-  faPowerOff,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
 import useHeader from "../../hooks/useHeader";
 import "./header.scss";
-import useLogout from "../../hooks/useLogout";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import faExport from "../../assets/svg/exportation.svg";
 import faImport from "../../assets/svg/importer.svg";
 import useSave from "../../hooks/useSave";
+import faUser from "../../assets/png/reglages.png"
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -23,7 +21,6 @@ const Header = () => {
   const [notifNbr, setnotifNbr] = useState(headerContext?.notifs.length);
   const authContext = useAuth();
   const saveContext = useSave()
-  const logout = useLogout();
   const axiosPrivate = useAxiosPrivate();
   const chevronRef = useRef<SVGSVGElement | null>(null);
   const selectDateRef = useRef<HTMLDivElement | null>(null);
@@ -96,92 +93,91 @@ const Header = () => {
   }, [headerContext?.notifs]);
 
   return (
-    <div className="navbar">
-      <div className="logo">
-        <img src={logoEuro} alt="logo" />
-        <span>{"Europ'Alu"}</span>
-      </div>
-      {(pathname == "/admin" || pathname.includes("/admin/problem/")) &&
-        headerContext?.years?.length !== 0 && (
-          <div className="date">
-            <div className="selected__date">
-              <h2 onClick={handleVisibleSelecteYear}>
-                Année {headerContext?.year}
-              </h2>
-              <FontAwesomeIcon
-                ref={chevronRef}
-                className="chevron"
-                icon={faChevronDown}
-                onClick={handleVisibleSelecteYear}
-              />
-            </div>
-            {headerContext?.years?.length &&
-              headerContext?.years?.length > 1 && (
-                <div ref={selectDateRef} className="setect__date">
-                  {headerContext?.years.map((item, index) => (
-                    <label key={index} onClick={() => handleClickYear(item)}>
-                      <input name="year" type="radio" value={item} />
-                      année {item}
-                    </label>
-                  ))}
-                </div>
-              )}
-          </div>
-        )}
-      <div className="icons">
-        <div ref={notificationRef} className="log">
-          <div className="scrollContent">
-            {headerContext?.notifs &&
-              headerContext.notifs.map((notif, index) => (
-                <Link to="/admin/log" key={index}>
-                  <div className="journal" onClick={handleShowNotication}>
-                    <div>
-                      <h2>{notif.split(";")[0]}</h2>
-                    </div>
-                    <h2 className="logDate">{notif.split(";")[1]}</h2>
+    <header>
+      <div className="navbar">
+        <div className="logo">
+          <img src={logoEuro} alt="logo" />
+          <span>{"Europ'Alu"}</span>
+        </div>
+        {(pathname == "/admin" || pathname.includes("/admin/problem/")) &&
+          headerContext?.years?.length !== 0 && (
+            <div className="date">
+              <div className="selected__date">
+                <h2 onClick={handleVisibleSelecteYear}>
+                  Année {headerContext?.year}
+                </h2>
+                <FontAwesomeIcon
+                  ref={chevronRef}
+                  className="chevron"
+                  icon={faChevronDown}
+                  onClick={handleVisibleSelecteYear}
+                />
+              </div>
+              {headerContext?.years?.length &&
+                headerContext?.years?.length > 1 && (
+                  <div ref={selectDateRef} className="setect__date">
+                    {headerContext?.years.map((item, index) => (
+                      <label key={index} onClick={() => handleClickYear(item)}>
+                        <input name="year" type="radio" value={item} />
+                        année {item}
+                      </label>
+                    ))}
                   </div>
-                </Link>
-              ))}
-          </div>
-        </div>
-        <input
-          type="file"
-          id="import"
-          ref={inputRef}
-          accept=".zip"
-          style={{ display: "none" }}
-          onChange={(e) => handleImport(e)}
-
-        />
-        <label htmlFor="import">
-          <div className="notification" onClick={() => {
-            if (inputRef.current) {
-              inputRef.current.value = ""
-            }
-          }}>
-            <img src={faImport} alt="export icon" className="icon" style={{ width: "26px", height: "26px" }} />
-          </div>
-        </label>
-        <div className="notification" onClick={handleExport}>
-          <img src={faExport} alt="import icon" className="icon" />
-        </div>
-        <div className="notification" onClick={handleShowNotication}>
-          {notifNbr == 0 ? (
-            <FontAwesomeIcon icon={faBell} className="icon" />
-          ) : (
-            <FontAwesomeIcon icon={faBell} className="icon" shake />
+                )}
+            </div>
           )}
-          {notifNbr !== 0 && <span> {notifNbr} </span>}
-        </div>
-        <div className="user">
-          <FontAwesomeIcon icon={faUser} className="icon" />
-          <span>{authContext?.auth?.name}</span>
-        </div>
-        <div className="logout" onClick={() => logout()}>
-          <FontAwesomeIcon icon={faPowerOff} className="powerIcon" />
+        <div className="icons">
+          <div ref={notificationRef} className="log">
+            <div className="scrollContent">
+              {headerContext?.notifs &&
+                headerContext.notifs.map((notif, index) => (
+                  <Link to="/admin/log" key={index}>
+                    <div className="journal" onClick={handleShowNotication}>
+                      <div>
+                        <h2>{notif.split(";")[0]}</h2>
+                      </div>
+                      <h2 className="logDate">{notif.split(";")[1]}</h2>
+                    </div>
+                  </Link>
+                ))}
+            </div>
+          </div>
+          <input
+            type="file"
+            id="import"
+            ref={inputRef}
+            accept=".zip"
+            style={{ display: "none" }}
+            onChange={(e) => handleImport(e)}
+
+          />
+          <label htmlFor="import">
+            <div className="notification" onClick={() => {
+              if (inputRef.current) {
+                inputRef.current.value = ""
+              }
+            }}>
+              <img src={faImport} alt="export icon" className="icon" style={{ width: "26px", height: "26px" }} />
+            </div>
+          </label>
+          <div className="notification" onClick={handleExport}>
+            <img src={faExport} alt="import icon" className="icon" />
+          </div>
+          <div className="notification" onClick={handleShowNotication}>
+            {notifNbr == 0 ? (
+              <FontAwesomeIcon icon={faBell} className="icon" />
+            ) : (
+              <FontAwesomeIcon icon={faBell} className="icon" shake />
+            )}
+            {notifNbr !== 0 && <span> {notifNbr} </span>}
+          </div>
+          <div className="user">
+            <img src={authContext?.auth?.avatar ? authContext?.auth?.avatar : faUser} className="icon" />
+            <span>{authContext?.auth?.name}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

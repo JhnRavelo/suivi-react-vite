@@ -8,6 +8,7 @@ import Suivis from '../pages/Admin/Suivis/Suivis'
 import Problems from '../pages/Admin/Problems/Problems'
 import Log from '../pages/Admin/Logs/Logs'
 import Saves from '../pages/Admin/Saves/Saves'
+import Profile from '../pages/Admin/Profile/Profile'
 
 const AdminRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AdminRouter = () => {
       <Route element={<Suivis />} path='/suivi' />
       <Route element={<Log />} path='/log' />
       <Route element={<Saves />} path='/save' />
+      <Route element={<Profile />} path='/profile' />
     </Routes>
   )
 }

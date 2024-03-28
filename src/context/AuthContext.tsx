@@ -5,6 +5,7 @@ type AuthUser = {
     accessToken: string 
     name: string | undefined
     email: string | undefined
+    avatar: string | null
 }
 
 type ProviderProps = {

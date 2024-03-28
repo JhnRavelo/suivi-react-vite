@@ -88,9 +88,9 @@ const Admin = () => {
         <div className="menuContainer">
           <Menu />
         </div>
-        <div className="contentContainer">
+        <section className="contentContainer">
           <AdminRouter />
-        </div>
+        </section>
       </div>
     </div>
   )
