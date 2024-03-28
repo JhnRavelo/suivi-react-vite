@@ -138,7 +138,7 @@ const Header = () => {
                     <div>
                       <h2>{notif.split(";")[0]}</h2>
                     </div>
-                    <h2 className="date">{notif.split(";")[1]}</h2>
+                    <h2 className="logDate">{notif.split(";")[1]}</h2>
                   </div>
                 </Link>
               ))}

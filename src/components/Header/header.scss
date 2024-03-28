@@ -213,11 +213,13 @@
           transform: scale(0.99);
         }
 
+        .logDate {
+          color: $orange;
+        }
         h2 {
           font-size: 12px;
           font-weight: normal;
         }
-
         span {
           color: $orange;
           font-weight: 700;
