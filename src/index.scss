@@ -24,25 +24,9 @@ body {
     box-sizing: content-box;
     height: 100%;
 }
-@keyframes tonga {
-    0% {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.icon-beat {
+    animation: beat 1s infinite alternate;
 }
-
-@keyframes appear {
-    0% {
-        opacity: 0;
-    }
-    50%{
-        opacity: 0.2;
-    }
-    100% {
-        opacity: 1;
-    }
+.icon-flip {
+    animation: flip 1s infinite linear;
 }
