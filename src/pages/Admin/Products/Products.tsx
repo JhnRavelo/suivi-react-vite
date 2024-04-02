@@ -10,7 +10,7 @@ import { validateProduct } from "../../../utils/validationSchemas"
 import { isProduct } from "../../../utils/verificationType"
 import PrintQR from "../../../components/PrintQR/PrintQR"
 
-export type initialValuesProduct = {
+export type InitialValuesProduct = {
     type: string[] | null
     devis?: string | null
     detail?: string | null
@@ -114,7 +114,7 @@ const columns: Colums = [
     },
 ]
 
-const initialValues: initialValuesProduct = {
+const initialValues: InitialValuesProduct = {
     type: null,
     devis: null,
     dimension: null,

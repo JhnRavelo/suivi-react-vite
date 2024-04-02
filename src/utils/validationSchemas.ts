@@ -81,4 +81,19 @@ const validateProduct = Yup.object({
 
 })
 
-export { validateLogin, validateType, validateUser, validateUserUpdate, validateProduct }
+const validationProfile = Yup.object({
+    name: Yup.string()
+        .required("Vous devez mettre votre nom")
+        .matches(/^[A-Za-z]+$/, "Votre nom doit seulement contenir des lettres"),
+    password: Yup.string()
+        .min(8, "Le mot de passe doit avoir au moins 8 caractères")
+        .matches(
+            /[A-Z]/,
+            "Le mot de passe doit contenir au moins une lettre majuscule"
+        )
+        .matches(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), ""], "Le mot de passe doit être le même"),
+})
+
+export { validateLogin, validateType, validateUser, validateUserUpdate, validateProduct, validationProfile }

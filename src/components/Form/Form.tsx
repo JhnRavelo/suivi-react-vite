@@ -9,9 +9,10 @@ import InputFile from "./InputFile";
 import { User, Users } from "../../context/UserContext";
 import { InitialValuesUser } from "../../pages/Admin/Users/Users";
 import { Product } from "../../context/ProductContext";
-import { initialValuesProduct } from "../../pages/Admin/Products/Products";
+import { InitialValuesProduct } from "../../pages/Admin/Products/Products";
 import {
     isInitialValuesProduct,
+    isInitialValuesProfile,
     isInitialValuesType,
 } from "../../utils/verificationType";
 import InputCHeckBox from "./InputCheckBox";
@@ -24,19 +25,22 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useCheckBox from "../../hooks/useCheckBox";
 import { Saves } from "../../context/SaveContext";
 import { StateBool } from "../../context/HeaderContext";
+import { AuthUser } from "../../context/AuthContext";
+import { InitialValuesProfile } from "../../pages/Admin/Profile/Profile";
 
 export type Edit = ProductType | null | User | Product | Suivi | Problem;
 
 export type InitialValues =
     | InitialValuesType
     | InitialValuesUser
-    | initialValuesProduct;
+    | InitialValuesProduct
+    | InitialValuesProfile;
 
 type AddFormProps = {
     slug: string;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setEditRow: React.Dispatch<React.SetStateAction<Edit>>;
-    editRow: Edit;
+    setEditRow?: React.Dispatch<React.SetStateAction<Edit>>;
+    editRow?: Edit;
     columns: Colums;
     initialValues: InitialValues;
     validate:
@@ -74,7 +78,8 @@ export type Data =
     | "types"
     | "problems"
     | "suivis"
-    | "files";
+    | "files"
+    | "user";
 
 export type URL =
     | "/auth/user"
@@ -83,16 +88,18 @@ export type URL =
     | "/problem"
     | "/suivi/delete"
     | "/data/delete/export"
-    | "/data/restore/export";
+    | "/data/restore/export"
+    | "/auth/profile";
 
 export type Dispatch =
     | React.Dispatch<React.SetStateAction<Users>>
     | undefined
     | React.Dispatch<React.SetStateAction<ProductTypes>>
     | React.Dispatch<React.SetStateAction<Problems>>
-    | React.Dispatch<React.SetStateAction<Suivis>> 
+    | React.Dispatch<React.SetStateAction<Suivis>>
     | React.Dispatch<React.SetStateAction<Saves>>
     | StateBool
+    | React.Dispatch<React.SetStateAction<AuthUser | null>>;
 
 export type CheckBox = React.Dispatch<React.SetStateAction<string[] | null>>;
 
@@ -129,6 +136,7 @@ const AddForm = ({
     const handleSubmit = async (values: InitialValues) => {
         const entries = Object.entries(values);
         const formData = new FormData();
+        console.log("UPDATE");
 
         entries.forEach(([key, value]) => {
             if ((key == "tech" || key == "type") && isInitialValuesProduct(values)) {
@@ -152,12 +160,14 @@ const AddForm = ({
             if (res.data.success && setState) {
                 setState(res.data[data]);
                 checkBox(setCheckbox, res.data[data]);
-                setEditRow(null);
+                if (setEditRow) {
+                    setEditRow(null);
+                }
                 setOpen(false);
             }
         } else {
             let res;
-            if (slug == "type") {
+            if (slug == "type" || slug == "profile") {
                 res = await axiosPrivate.post(url, formData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
@@ -178,7 +188,9 @@ const AddForm = ({
                     className="close"
                     onClick={() => {
                         setOpen(false);
-                        setEditRow(null);
+                        if (setEditRow) {
+                            setEditRow(null);
+                        }
                     }}
                 >
                     X
@@ -232,7 +244,10 @@ const AddForm = ({
                                                 />
                                             </Fragment>
                                         );
-                                    } else if (column.field == "pdf") {
+                                    } else if (
+                                        column.field == "pdf" ||
+                                        column.field == "avatar"
+                                    ) {
                                         return (
                                             <div className="item" key={index}>
                                                 <label>{column.headerName}</label>
@@ -240,7 +255,11 @@ const AddForm = ({
                                                     name={column.field}
                                                     setFieldValue={setFieldValue}
                                                     value={
-                                                        isInitialValuesType(values) ? values : undefined
+                                                        isInitialValuesType(values)
+                                                            ? values.pdf?.name
+                                                            : isInitialValuesProfile(values)
+                                                                ? values.avatar?.name
+                                                                : undefined
                                                     }
                                                 />
                                             </div>

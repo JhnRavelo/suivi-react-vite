@@ -6,11 +6,65 @@ import FormAdd from "../../../components/Form/Form"
 import useAuth from "../../../hooks/useAuth"
 import faAvatar from "../../../assets/png/reglages.png"
 import useLogout from "../../../hooks/useLogout"
+import { Colums } from "../../../components/DataTable/DataTable"
+import { validationProfile } from "../../../utils/validationSchemas"
+
+export type InitialValuesProfile = {
+    name: string;
+    avatar: File | null;
+    password: string;
+    confirmPassword: string;
+}
+
+const columns: Colums = [
+    {
+        field: "name",
+        type: "string",
+        inputMode: "text",
+        headerName: "Nom de l'administrateur",
+        placeholder: "nom de l'administrateur",
+        width: 40,
+        disableExport: true,
+    },
+    {
+        field: "avatar",
+        type: "file",
+        inputMode: "file",
+        headerName: "Image profile",
+        placeholder: "Image de profile",
+        width: 40,
+        disableExport: true,
+    },
+    {
+        field: "password",
+        type: "password",
+        inputMode: "password",
+        headerName: "Mot de passe",
+        placeholder: "Ne changera pas si vide",
+        width: 120,
+        disableExport: true
+    },
+    {
+        field: "confirmPassword",
+        type: "password",
+        inputMode: "password",
+        headerName: "Confirmation mot de passe",
+        placeholder: "Retapez le mot de passe",
+        width: 120,
+        disableExport: true
+    },
+]
 
 const Profile = () => {
     const [open, setOpen] = useState(false)
     const logout = useLogout()
     const authContext = useAuth()
+    const initialValues : InitialValuesProfile = {
+        name: authContext?.auth?.name ? authContext?.auth?.name : "",
+        avatar: null,
+        password: "",
+        confirmPassword: "",
+    }
     return (
         <>
             <div id="profile">
@@ -33,19 +87,22 @@ const Profile = () => {
                     </div>
                 </div>
                 <button className="logout__button" onClick={() => logout()}>
-                    <img src={faSignOutAlt} className="icon-flip"/>
+                    <img src={faSignOutAlt} className="icon-flip" />
                     Se déconnecter
                 </button>
             </div>
-            {/* {open && (
-        <FormAdd
-          slug="profile"
-          columns={columns}
-          setOpen={setOpen}
-          editRow={auth}
-          url="/auth/User"
-        />
-      )} */}
+            {open && (
+                <FormAdd
+                    slug="profile"
+                    columns={columns}
+                    setOpen={setOpen}
+                    initialValues={initialValues}
+                    validate={validationProfile}
+                    setState={authContext?.setAuth}
+                    data="user"
+                    url="/auth/profile"
+                />
+            )}
         </>
     )
 }

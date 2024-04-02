@@ -1,4 +1,4 @@
-import { initialValuesProduct } from "../pages/Admin/Products/Products";
+import { InitialValuesProduct } from "../pages/Admin/Products/Products";
 import { Dispatch, Edit } from "../components/Form/Form";
 import { ProductType } from "../context/ProductTypeContext";
 import { InitialValuesUser } from "../pages/Admin/Users/Users";
@@ -11,6 +11,7 @@ import { Problem } from "../context/ProblemContext";
 import { InitialValuesProblem } from "../pages/Admin/Problems/Problems";
 import { User } from "../context/UserContext";
 import { StateBool } from "../context/HeaderContext";
+import { InitialValuesProfile } from "../pages/Admin/Profile/Profile";
 
 
 export function isInitialValuesType(obj: InitialValues): obj is InitialValuesType {
@@ -21,12 +22,16 @@ export function isInitialValuesUser(obj: InitialValues): obj is InitialValuesUse
     return obj && typeof obj === 'object' && 'email' in obj;
 }
 
-export function isInitialValuesProduct(obj: InitialValues): obj is initialValuesProduct {
+export function isInitialValuesProduct(obj: InitialValues): obj is InitialValuesProduct {
     return obj && typeof obj === 'object' && 'type' in obj;
 }
 
 export function isInitialValuesProblem(obj: InitialValues): obj is InitialValuesProblem {
     return obj && typeof obj === 'object' && 'name' in obj;
+}
+
+export function isInitialValuesProfile(obj: InitialValues): obj is InitialValuesProfile {
+    return obj && typeof obj === 'object' && 'avatar' in obj;
 }
 
 export function isProduct(obj: Edit): obj is Product {

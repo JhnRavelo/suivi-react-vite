@@ -172,7 +172,7 @@ const Header = () => {
             {notifNbr !== 0 && <span> {notifNbr} </span>}
           </div>
           <div className="user">
-            <img src={authContext?.auth?.avatar ? authContext?.auth?.avatar : faUser} className="icon" />
+            <img src={authContext?.auth?.avatar ? authContext?.auth?.avatar : faUser} className="userIcon" />
             <span>{authContext?.auth?.name}</span>
           </div>
         </div>
