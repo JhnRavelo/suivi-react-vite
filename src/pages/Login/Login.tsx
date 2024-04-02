@@ -25,7 +25,6 @@ const Login = () => {
   const navigate = useNavigate()
 
   const handleSubmit = async (values: formValue) => {
-
     try {
       const res = await defaultAxios.post("/auth/login-web", values)
 
@@ -35,11 +34,10 @@ const Login = () => {
         }
         return
       }
-
-      authContext?.setAuth({ role: res.data.role, accessToken: res.data.accessToken, name: res.data.name, email: res.data.email })
+      authContext?.setAuth(res.data.user)
       navigate("/admin")
     } catch (error) {
-      console.log(error)
+      console.log("ERROR LOGIN", error)
       setError("Problème de serveur")
     }
   }
