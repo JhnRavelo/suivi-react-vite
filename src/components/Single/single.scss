@@ -1,6 +1,7 @@
 @import "../../pages/Admin/responsive.scss";
+@import "../../pages/Admin/variables.scss";
 
-.single {
+.product {
   display: flex;
   max-height: 100vh;
 
@@ -15,16 +16,9 @@
 
     .info {
       .topInfo {
+        margin-left: 50px;
         display: flex;
-        align-items: center;
         gap: 20px;
-
-        img {
-          width: 100px;
-          height: 100px;
-          //   border-radius: 20px;
-          object-fit: fill;
-        }
 
         h1 {
           font-weight: 500;
@@ -35,26 +29,16 @@
 
         .item {
           margin: 20px 0px;
-
-          .gallery-single {
-            display: flex;
-            margin-top: 10px;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            flex-direction: row;
-            img {
-              // margin-left: 20px;
-              width: 50px;
-              height: 50px;
+          width: 90%;
+          flex-direction: column;
+          display: flex;
+          p {
+            text-align: justify;
+            span {
+              color: $orange;
             }
           }
-
-          .itemTitle {
-            font-weight: 600;
-            margin-right: 10px;
-            text-transform: capitalize;
-          }
+        
         }
       }
     }

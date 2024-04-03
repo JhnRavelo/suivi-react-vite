@@ -22,15 +22,22 @@ type SingleProps = {
 
 const Single = ({ item, chartData, dataKeys, activities }: SingleProps) => {
   return (
-    <div className="single">
+    <div className="product">
       <div className="view">
         <div className="info">
           <div className="topInfo">
-            <h1>{item?.type}</h1>
+            <h1>Description</h1>
           </div>
           <div className="details">
             <div className="item">
-              <p>{item?.tech}</p>
+              <p>
+                Ce produit a été enregistré par {item?.tech} le{" "}
+                {item?.createdAt.split(" ")[0]} à{" "}
+                {item?.createdAt.split(" ")[1]} aux alentours de{" "}
+                {item?.location}. Il a été créé pour <span>{item?.client}</span> comme
+                stipulé dans le devis <span>{item?.devis}</span> du chantier <span>{item?.chantier}</span>
+                .
+              </p>
             </div>
           </div>
         </div>

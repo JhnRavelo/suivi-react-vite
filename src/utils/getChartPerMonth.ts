@@ -1,18 +1,27 @@
-import { dataHome } from "../assets/ts/data"
+import { BigCharDatas, SingleDatas } from "../assets/ts/data";
 import { StatSuivis } from "../context/HomeContext";
+import { StatProducts } from "../context/ProductContext";
 
-const getChartPerMonth = (nbUser: StatSuivis) => {
-    const newState = dataHome.map((prev) => {
-        const matchingNb = nbUser.find((nb) => nb.month == prev.number);
+export type Stats = StatSuivis | StatProducts
 
-        if (matchingNb) {
-            return { ...prev, suivis: matchingNb.suiviCount };
-        } else {
-            return prev;
-        }
-    });
+export type ChartDatasAssets = BigCharDatas | SingleDatas 
 
-    return newState;
+const getChartPerMonth = (
+  stats: Stats,
+  data: ChartDatasAssets,
+  keyName: "suivis" | "total_suivis" | "suivis_produits"
+) => {
+  const newState = data.map((prev) => {
+    const matchingNb = stats.find((nb) => nb.month == prev.number);
+
+    if (matchingNb) {
+      return { ...prev, [keyName]: matchingNb.count };
+    } else {
+      return prev;
+    }
+  });
+
+  return newState;
 };
 
 export default getChartPerMonth;

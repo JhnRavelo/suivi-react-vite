@@ -19,7 +19,7 @@ type HomeContextProblems = {
 }[] | null
 
 type StatSuivi = {
-    suiviCount: number
+    count: number
     month: number
     year: number
 }

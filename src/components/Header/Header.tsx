@@ -99,7 +99,7 @@ const Header = () => {
           <img src={logoEuro} alt="logo" />
           <span>{"Europ'Alu"}</span>
         </div>
-        {(pathname == "/admin" || pathname.includes("/admin/problem/")) &&
+        {(pathname == "/admin" || pathname.includes("/admin/problem/") || pathname.includes("/admin/product/")) &&
           headerContext?.years?.length !== 0 && (
             <div className="date">
               <div className="selected__date">

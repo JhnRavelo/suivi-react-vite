@@ -37,7 +37,6 @@ const Admin = () => {
     try {
       const fetchLogs = await axiosPrivate.get("/log")
       if (fetchLogs.data.success) {
-        console.log("LOG", fetchLogs.data.allLogs)
         headerContext?.setNotifs(fetchLogs.data.logs)
         logContext?.setLogs(fetchLogs.data.allLogs)
       }
@@ -71,6 +70,7 @@ const Admin = () => {
         homeContext?.setStatTop(stat.data.statTop)
         homeContext?.setStatSuivis(stat.data.statSuivis)
         homeContext?.setStatProductTypes(stat.data.statProductTypes)
+        productContext?.setStatProducts(stat.data.statProducts)
       }
       const fetchSave = await axiosPrivate.get("/data/read/export")
       if (fetchSave.data.success) {
