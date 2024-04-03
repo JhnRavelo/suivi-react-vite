@@ -7,6 +7,10 @@ export type Logs = {
     createdAt: string
     problem: string
     solution: string
+    productLogId?: number
+    userId?: number
+    productId?: number
+    productTypeId?: number
 }[]
 
 type LogContextValue = {
