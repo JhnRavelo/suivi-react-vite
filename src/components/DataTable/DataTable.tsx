@@ -19,6 +19,7 @@ import faExcel from "../../assets/png/xls.png";
 import { utils, writeFileXLSX } from "xlsx";
 import { Saves } from "../../context/SaveContext";
 import faRestore from "../../assets/png/restaurer.png"
+import faChart from "../../assets/svg/barChart.svg"
 
 type DataTableProps = {
   rows: ProductTypes | undefined | Users | Products | Suivis | Saves;
@@ -177,9 +178,14 @@ const DataTable = ({
             </div>
           )}
           {slug === "product" && isProduct(params.row) && (
-            <div onClick={() => handlePrint(params.row)}>
-              <img src={faQRCode} alt="image de QR Code" style={{ objectFit: "contain" }} />
-            </div>
+            <>
+              <div onClick={() => handlePrint(params.row)}>
+                <img src={faQRCode} alt="image de QR Code" />
+              </div>
+              <div onClick={() => navigate(`/admin/product/${params.row.id}`)}>
+                <img src={faChart} alt="image Chart" />
+              </div>
+            </>
           )}
         </div>
       );

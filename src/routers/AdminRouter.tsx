@@ -9,6 +9,7 @@ import Problems from '../pages/Admin/Problems/Problems'
 import Log from '../pages/Admin/Logs/Logs'
 import Saves from '../pages/Admin/Saves/Saves'
 import Profile from '../pages/Admin/Profile/Profile'
+import ProductSingle from '../pages/Admin/Product/Product'
 
 const AdminRouter = () => {
   return (
@@ -19,6 +20,7 @@ const AdminRouter = () => {
       <Route element={<Problems />} path='/problem/:id' />
       <Route element={<Users />} path='/user' />
       <Route element={<Products />} path='/product' />
+      <Route element={<ProductSingle />} path='/product/:id' />
       <Route element={<Suivis />} path='/suivi' />
       <Route element={<Log />} path='/log' />
       <Route element={<Saves />} path='/save' />
