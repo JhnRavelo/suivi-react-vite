@@ -52,7 +52,7 @@ const ProductSingle = () => {
         (item) => item.year == headerContext.year
       );
       const statProductsPerYear = productContext.statProducts.filter(
-        (item) => item.year == headerContext.year
+        (item) => item.year == headerContext.year && item.productId.toString() == id
       );
       const chartDataSuivis = getChartPerMonth(
         statSuivisPerYear,

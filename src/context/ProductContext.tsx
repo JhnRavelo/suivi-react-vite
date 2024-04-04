@@ -20,6 +20,7 @@ export type Product = {
   productTypeId?: number;
   createdAt: string;
   tech?: string;
+  userProductId?: number
 };
 
 export type StatProducts = {

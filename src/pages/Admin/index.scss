@@ -1,12 +1,6 @@
 @import "./variables.scss";
 @import "./responsive.scss";
 
-// * {
-//   margin: 0;
-//   padding: 0;
-//   box-sizing: border-box;
-// }
-
 a {
   text-decoration: none;
   color: inherit;
@@ -36,6 +30,7 @@ a {
 .contentContainer {
   padding: 5px 20px;
   width: 100%;
+  overflow: hidden;
 }
 .addButton {
   padding: 5px;

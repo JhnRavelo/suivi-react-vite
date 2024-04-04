@@ -1,14 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
 import "../ProductTypes/productTypes.scss"
 import { faPlus } from "@fortawesome/free-solid-svg-icons"
 import AddForm, { Edit } from "../../../components/Form/Form"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import useProduct from "../../../hooks/useProduct"
 import { validateProduct } from "../../../utils/validationSchemas"
-import { isProduct } from "../../../utils/verificationType"
+import { isProduct, isProducts } from "../../../utils/verificationType"
 import PrintQR from "../../../components/PrintQR/PrintQR"
+import useRows from "../../../hooks/useRows"
 
 export type InitialValuesProduct = {
     type: string[] | null
@@ -128,10 +130,17 @@ const initialValues: InitialValuesProduct = {
 const Products = () => {
     const [open, setOpen] = useState(false)
     const productContext = useProduct()
+    const rows = useRows("products")
     const [editRow, setEditRow] = useState<Edit>(null)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [deleteRow, setDeleteRow] = useState<number | null>(null)
     const [printOpen, setPrintOpen] = useState(false)
+
+    useEffect(()=>{
+        if(rows && isProducts(rows)){
+            productContext?.setProducts(rows)
+        }
+    }, [rows])
 
     return (
         <>
@@ -146,7 +155,7 @@ const Products = () => {
                 <DataTable
                     slug="product"
                     columns={columns}
-                    rows={productContext?.products}
+                    rows={rows}
                     setOpen={setOpen}
                     setEditRow={setEditRow}
                     setDeleteOpen={setDeleteOpen}

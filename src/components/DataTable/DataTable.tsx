@@ -21,8 +21,10 @@ import { Saves } from "../../context/SaveContext";
 import faRestore from "../../assets/png/restaurer.png"
 import faChart from "../../assets/svg/barChart.svg"
 
+export type Rows = ProductTypes | undefined | Users | Products | Suivis | Saves
+
 type DataTableProps = {
-  rows: ProductTypes | undefined | Users | Products | Suivis | Saves;
+  rows: Rows;
   slug: "type" | "user" | "product" | "suivi" | "save";
   columns: Colums;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
