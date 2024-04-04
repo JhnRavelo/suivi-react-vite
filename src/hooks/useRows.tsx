@@ -1,48 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Rows } from "../components/DataTable/DataTable";
 import { useEffect, useState } from "react";
 import useProduct from "./useProduct";
+import useUser from "./useUser";
 import useProductType from "./useProductType";
 import { Data } from "../components/Form/Form";
-import { Rows } from "../components/DataTable/DataTable";
-import useUser from "./useUser";
 
 const useRows = (type: Data) => {
-  const productContext = useProduct();
-  const productTypeContext = useProductType();
-  const userContext = useUser();
   const [rows, setRows] = useState<Rows>();
+  const productContext = useProduct();
+  const userContext = useUser();
+  const productTypeContext = useProductType();
 
   useEffect(() => {
     if (
-      productContext?.products &&
       productTypeContext?.types &&
-      userContext?.users
+      userContext?.users &&
+      productContext?.products
     ) {
       if (type == "products") {
-        const productRows = productContext.products.map((product) => {
-          const matchType = productTypeContext.types.find(
+        const productRows = productContext?.products.map((product) => {
+          const matchType = productTypeContext?.types.find(
             (type) => type.id == product.productTypeId
           );
           const matchUser = userContext?.users.find(
             (user) => user.id == product.userProductId
           );
-          if (matchType && matchUser) {
-            return {
-              ...product,
+          let currentProduct = product
+          if (matchType) {
+            currentProduct = {
+              ...currentProduct,
               type: matchType.name,
+            };
+          }
+          if (matchUser) {
+            currentProduct = {
+              ...currentProduct,
               tech: matchUser.name,
             };
-          } else return product;
+          }
+          return currentProduct;
         });
         setRows(productRows);
       }
     }
-  }, [
-    type,
-    productContext?.products,
-    productTypeContext?.types,
-    userContext?.users,
-  ]);
+  }, [userContext?.users, productTypeContext?.types, productContext?.products]);
 
   return rows;
 };

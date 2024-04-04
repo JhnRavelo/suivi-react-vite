@@ -45,7 +45,7 @@ export function isInitialValuesProfile(
 
 export function isProduct(obj: Edit): obj is Product {
   if (obj) {
-    return obj && typeof obj === "object" && "productTypeId" in obj;
+    return obj && typeof obj === "object" && "client" in obj;
   } else {
     return false;
   }
@@ -53,7 +53,7 @@ export function isProduct(obj: Edit): obj is Product {
 export function isProducts(arr: Rows): arr is Products {
   if (Array.isArray(arr)) {
     return arr.every(
-      (item) => typeof item === "object" && "productTypeId" in item
+      (item) => typeof item === "object" && "client" in item
     );
   }
   return false;
