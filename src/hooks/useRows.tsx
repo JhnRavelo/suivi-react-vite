@@ -6,28 +6,8 @@ import useUser from "./useUser";
 import useProductType from "./useProductType";
 import { Data } from "../components/Form/Form";
 import useSuvi from "./useSuvi";
-import { Problems } from "../context/ProblemContext";
 import useProblem from "./useProblem";
-
-const getProblem = (
-  problems: Problems,
-  probemId: number,
-  problemName: string
-) => {
-  let problemType = "",
-    problem = "";
-  const matchProblem = problems.find((problem) => problem.id == probemId);
-  if (matchProblem && problemName) {
-    problemType = `${matchProblem?.name}: `;
-  } else if (matchProblem && !problemName) {
-    problemType = matchProblem?.name;
-  }
-
-  if (problemName) {
-    problem = problemName;
-  }
-  return problemType + problem;
-};
+import useGetProblem from "./useGetProblem";
 
 const useRows = (type: Data) => {
   const [rows, setRows] = useState<Rows>();
@@ -36,6 +16,7 @@ const useRows = (type: Data) => {
   const productTypeContext = useProductType();
   const suiviContext = useSuvi();
   const ProblemContext = useProblem();
+  const getProblem = useGetProblem()
 
   useEffect(() => {
     if (
