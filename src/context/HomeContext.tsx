@@ -14,9 +14,7 @@ type HomeContextProblems =
   | {
       problem: string;
       problemCount: number;
-      problems: {
-        name: string;
-      };
+      problemId: number;
     }[]
   | null;
 
@@ -37,6 +35,8 @@ type StatTop = {
   client: string;
   chantier: string;
   problems: HomeContextProblems;
+  productTypeId: number;
+  probArrStr: string[];
 };
 
 export type StatProductType = {

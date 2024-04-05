@@ -62,7 +62,7 @@ const ChartPie = ({ chartData }: CharPieProps) => {
                                             < item.name.split(" ")[1].length ? item.name.split(" ")[0]
                                             + " " + item.name.split(" ")[1][0].toUpperCase() + "." :
                                             item.name.split(" ")[0][0].toUpperCase() + ". " + item.name.split(" ")[1]}`
-                                            : `${item.name.split(" ")[0]}`}</span>
+                                            : `${item.name}`}</span>
                                     </div>
                                     <span style={{ color: item.color }}>{total > 0 ? Math.floor((item.value / total) * 100) : null}%</span>
                                 </div>
