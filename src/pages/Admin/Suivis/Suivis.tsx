@@ -4,6 +4,7 @@ import ModalDelete from "../../../components/ModalDelete/ModalDelete"
 import useSuvi from "../../../hooks/useSuvi"
 import { isSuivi } from "../../../utils/verificationType"
 import "../ProductTypes/productTypes.scss"
+import useRows from "../../../hooks/useRows"
 
 const columns: Colums = [
     {
@@ -132,6 +133,7 @@ const columns: Colums = [
 
 const Suivis = () => {
     const suiviContext = useSuvi()
+    const rows = useRows("suivis")
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false)
     const [deleteRow, setDeleteRow] = useState<null | number>(null)
 
@@ -144,7 +146,7 @@ const Suivis = () => {
                 <DataTable
                     slug="suivi"
                     columns={columns}
-                    rows={suiviContext?.suivis}
+                    rows={rows}
                     setDeleteOpen={setDeleteOpen}
                     setDeleteRow={setDeleteRow}
                 />

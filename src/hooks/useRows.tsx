@@ -5,12 +5,37 @@ import useProduct from "./useProduct";
 import useUser from "./useUser";
 import useProductType from "./useProductType";
 import { Data } from "../components/Form/Form";
+import useSuvi from "./useSuvi";
+import { Problems } from "../context/ProblemContext";
+import useProblem from "./useProblem";
+
+const getProblem = (
+  problems: Problems,
+  probemId: number,
+  problemName: string
+) => {
+  let problemType = "",
+    problem = "";
+  const matchProblem = problems.find((problem) => problem.id == probemId);
+  if (matchProblem && problemName) {
+    problemType = `${matchProblem?.name}: `;
+  } else if (matchProblem && !problemName) {
+    problemType = matchProblem?.name;
+  }
+
+  if (problemName) {
+    problem = problemName;
+  }
+  return problemType + problem;
+};
 
 const useRows = (type: Data) => {
   const [rows, setRows] = useState<Rows>();
   const productContext = useProduct();
   const userContext = useUser();
   const productTypeContext = useProductType();
+  const suiviContext = useSuvi();
+  const ProblemContext = useProblem();
 
   useEffect(() => {
     if (
@@ -18,7 +43,7 @@ const useRows = (type: Data) => {
       userContext?.users &&
       productContext?.products
     ) {
-      if (type == "products") {
+      if (type === "products") {
         const productRows = productContext?.products.map((product) => {
           const matchType = productTypeContext?.types.find(
             (type) => type.id == product.productTypeId
@@ -26,7 +51,7 @@ const useRows = (type: Data) => {
           const matchUser = userContext?.users.find(
             (user) => user.id == product.userProductId
           );
-          let currentProduct = product
+          let currentProduct = product;
           if (matchType) {
             currentProduct = {
               ...currentProduct,
@@ -42,9 +67,63 @@ const useRows = (type: Data) => {
           return currentProduct;
         });
         setRows(productRows);
+      } else if (
+        type === "suivis" &&
+        suiviContext?.suivis &&
+        ProblemContext?.problems
+      ) {
+        const suiviRows = suiviContext.suivis.map((suivi) => {
+          let currentSuivi = suivi;
+          const matchProduct = productContext.products.find(
+            (product) => product.id == suivi.productId
+          );
+          const matchUser = userContext.users.find(
+            (user) => user.id == suivi.userId
+          );
+          const matchType = productTypeContext.types.find(
+            (type) => type.id == suivi.productTypeId
+          );
+          if (matchProduct) {
+            currentSuivi = {
+              ...currentSuivi,
+              client: matchProduct.client,
+              chantier: matchProduct.chantier,
+              devis: matchProduct.devis,
+            };
+          }
+          if (matchUser) {
+            currentSuivi = {
+              ...currentSuivi,
+              tech: matchUser.name,
+            };
+          }
+          if (matchType) {
+            currentSuivi = {
+              ...currentSuivi,
+              type: matchType.name,
+            };
+          }
+          const problem = getProblem(
+            ProblemContext.problems,
+            suivi.problemId,
+            suivi.problem
+          );
+          currentSuivi = {
+            ...currentSuivi,
+            problem: problem,
+          };
+          return currentSuivi;
+        });
+        setRows(suiviRows);
       }
     }
-  }, [userContext?.users, productTypeContext?.types, productContext?.products]);
+  }, [
+    userContext?.users,
+    productTypeContext?.types,
+    productContext?.products,
+    suiviContext?.suivis,
+    ProblemContext?.problems,
+  ]);
 
   return rows;
 };

@@ -27,7 +27,6 @@ const Home = () => {
     if (homeContext?.statSuivis && headerContext?.year) {
       const filterStatSuivisPerYear = homeContext.statSuivis.filter(item => item.year == headerContext.year)
       const statSuivis = getChartPerMonth(filterStatSuivisPerYear, dataHome, "suivis")
-      console.log("YEAR", statSuivis)
       setBigChartData(statSuivis)
     }
   }, [homeContext?.statSuivis, headerContext?.year])

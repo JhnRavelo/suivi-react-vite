@@ -4,7 +4,7 @@ import { CheckBox } from "../components/Form/Form"
 
 export type ProductType = {
     id: number
-    name?: string
+    name: string
     createdAt: string
     pdf?: string 
 }

@@ -12,11 +12,11 @@ export type Product = {
   id: number;
   type?: string;
   location?: string;
-  devis?: string;
+  devis: string;
   detail?: string;
   dimension?: string;
-  client?: string;
-  chantier?: string;
+  client: string;
+  chantier: string;
   productTypeId?: number;
   createdAt: string;
   tech?: string;

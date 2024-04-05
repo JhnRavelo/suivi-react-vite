@@ -4,7 +4,7 @@ import { CheckBox } from "../components/Form/Form";
 
 type User = {
     connected?: boolean
-    name?: string
+    name: string
     email?: string
     id: number
     phone?: number
