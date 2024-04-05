@@ -1,15 +1,23 @@
 import { StatProductTypes } from "../context/HomeContext"
-import { StatProblems } from "../context/ProblemContext"
+import { Problems, StatProblems } from "../context/ProblemContext"
+import { ProductTypes } from "../context/ProductTypeContext"
 import generateColor from "./generateColor"
 
-const getPieChart = (value: StatProblems | StatProductTypes) => {
-    if (value) {
-        const chartDataProblem = value.map(item => {
+const getPieChart = (values: StatProblems | StatProductTypes, datas: Problems | ProductTypes) => {
+    if (values) {
+        const chartDataProblem = values.map(item => {
             const color = generateColor()
-            return {
-                name: item.name,
-                value: item.count,
-                color: color
+            const match = datas.find(data => data.id == item.id)
+            if (match) {
+                return {
+                    name: match.name,
+                    value: item.count,
+                    color: color
+                }
+            } else return {
+                name: "autre",
+                color: color,
+                value: item.count
             }
         })
         return chartDataProblem

@@ -8,6 +8,7 @@ import getChartPerMonth from "../../../utils/getChartPerMonth"
 import { BigCharDatas, dataHome } from "../../../assets/ts/data"
 import ChartPie, { PieCharData } from "../../../components/PieChart/ChartPie"
 import getPieChart from "../../../utils/getPieChart"
+import useProductType from "../../../hooks/useProductType"
 
 const Home = () => {
   const homeContext = useHome()
@@ -15,6 +16,7 @@ const Home = () => {
   const [topProblem, setTopProblem] = useState<StatTops>()
   const [bigChartData, setBigChartData] = useState<BigCharDatas>(dataHome)
   const [pieChartData, setPieChartData] = useState<PieCharData>()
+  const productTypeContext = useProductType()
 
   useEffect(() => {
     if (homeContext?.statTop && headerContext?.year) {
@@ -32,12 +34,12 @@ const Home = () => {
   }, [homeContext?.statSuivis, headerContext?.year])
 
   useEffect(() => {
-    if (homeContext?.statProductTypes && headerContext?.year) {
+    if (homeContext?.statProductTypes && headerContext?.year && productTypeContext?.types) {
       const filterStatProductTypesPerYear = homeContext.statProductTypes.filter(item => item.year == headerContext.year)
-      const statProductTypes = getPieChart(filterStatProductTypesPerYear)
+      const statProductTypes = getPieChart(filterStatProductTypesPerYear, productTypeContext?.types)
       setPieChartData(statProductTypes)
     }
-  }, [homeContext?.statProductTypes, headerContext?.year])
+  }, [homeContext?.statProductTypes, headerContext?.year, productTypeContext?.types])
 
   return (
     <div className="home">

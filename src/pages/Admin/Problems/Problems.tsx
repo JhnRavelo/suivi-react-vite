@@ -12,129 +12,156 @@ import { isProblem } from "../../../utils/verificationType";
 import useProblem from "../../../hooks/useProblem";
 import ModalDelete from "../../../components/ModalDelete/ModalDelete";
 import ChartPie, { PieCharData } from "../../../components/PieChart/ChartPie";
-import "../Home/home.scss"
+import "../Home/home.scss";
 import useHeader from "../../../hooks/useHeader";
 import getPieChart from "../../../utils/getPieChart";
 
 export type InitialValuesProblem = {
-    name: string
-    productTypeId?: string
-}
+  name: string;
+  productTypeId?: string;
+};
 
 const columns: Colums = [
-    {
-        field: "name",
-        type: "string",
-        inputMode: "text",
-        headerName: "Type de produit",
-        placeholder: "Le type de produit",
-        width: 210,
-        disableExport: true,
-    },
-]
+  {
+    field: "name",
+    type: "string",
+    inputMode: "text",
+    headerName: "Type de produit",
+    placeholder: "Le type de produit",
+    width: 210,
+    disableExport: true,
+  },
+];
 
 const Problems = () => {
-    const { id } = useParams()
-    const productTypeContext = useProductType()
-    const [open, setOpen] = useState<boolean>(false)
-    const [editRow, setEditRow] = useState<Edit>(null)
-    const [deleteRow, setDeleteRow] = useState<number | null>(null)
-    const [deleteOpen, setDeleteOpen] = useState(false)
-    const [chartData, setChartData] = useState<PieCharData>()
-    const problemContext = useProblem()
-    const headerContext = useHeader()
+  const { id } = useParams();
+  const productTypeContext = useProductType();
+  const [open, setOpen] = useState<boolean>(false);
+  const [editRow, setEditRow] = useState<Edit>(null);
+  const [deleteRow, setDeleteRow] = useState<number | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [chartData, setChartData] = useState<PieCharData>();
+  const problemContext = useProblem();
+  const headerContext = useHeader();
 
-    const initialValues: InitialValuesProblem = {
-        name: "",
-        productTypeId: id,
+  const initialValues: InitialValuesProblem = {
+    name: "",
+    productTypeId: id,
+  };
+
+  useEffect(() => {
+    if (productTypeContext?.types) {
+      const type = productTypeContext.types.filter(
+        (item) => item.id.toString() == id
+      );
+      productTypeContext.setType(type[0]);
     }
+    if (problemContext?.problems) {
+      const problems = problemContext.problems.filter(
+        (item) => item.productTypeId.toString() == id
+      );
+      problemContext.setProblemsByType(problems);
+    }
+  }, [id, productTypeContext, problemContext?.problems]);
 
-    useEffect(() => {
-        if (productTypeContext?.types) {
-            const type = productTypeContext.types.filter(item => item.id.toString() == id)
-            productTypeContext.setType(type[0])
-        }
-        if (problemContext?.problems) {
-            const problems = problemContext.problems.filter(item => item.productTypeId.toString() == id)
-            problemContext.setProblemsByType(problems)
-        }
-    }, [id, productTypeContext, problemContext?.problems])
+  useEffect(() => {
+    if (
+      problemContext?.statProblems &&
+      headerContext?.year &&
+      problemContext.problems
+    ) {
+      const statProblemCurrentYear = problemContext.statProblems.filter(
+        (item) => item.year == headerContext?.year && item.productTypeId.toString() == id
+      );
+      const statProblem = getPieChart(
+        statProblemCurrentYear,
+        problemContext.problems
+      );
+      setChartData(statProblem);
+    }
+  }, [
+    headerContext?.year,
+    problemContext?.statProblems,
+    problemContext?.problems,
+  ]);
 
-    useEffect(() => {
-        if (problemContext?.statProblems && headerContext?.year) {
-            const statProblemCurrentYear = problemContext.statProblems.
-                filter(item => item.year == headerContext?.year && item.productTypeId.toString() == id)
-            const statProblem = getPieChart(statProblemCurrentYear)
-            setChartData(statProblem)
-        }
-    }, [headerContext?.year, problemContext?.statProblems])
-
-    return (
-        <div className="product" style={{ display: 'flex', }}>
-            <div className="single" style={{ flex: 3 }}>
-                <div className="view" style={{ width: "100%" }}>
-                    <div className="info">
-                        <div className="topInfo">
-                            <h1>{productTypeContext?.type?.name}</h1>
-                            <button className="addButton" onClick={() => setOpen(true)}>
-                                <FontAwesomeIcon icon={faPlus} beat />
-                                Ajout d'un problème
-                            </button>
-                        </div>
-                    </div>
-                    <hr />
-                    <div className="details">
-                        <h3 >La liste des problèmes lié à ce type de ménuiserie</h3>
-                        <div className="problemContainer">
-                            {problemContext?.problemsByType &&
-                                problemContext.problemsByType.map((item, index) => (
-                                    <div className="item" key={index} >
-                                        <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => {
-                                            setEditRow(item);
-                                            setOpen(true)
-                                        }}
-                                        />
-                                        <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => {
-                                            setDeleteRow(item.id)
-                                            setDeleteOpen(true)
-                                        }} />
-                                        <p>{item.name}</p>
-                                    </div>
-                                ))}
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div className="product" style={{ display: "flex" }}>
+      <div className="single" style={{ flex: 3 }}>
+        <div className="view" style={{ width: "100%" }}>
+          <div className="info">
+            <div className="topInfo">
+              <h1>{productTypeContext?.type?.name}</h1>
+              <button className="addButton" onClick={() => setOpen(true)}>
+                <FontAwesomeIcon icon={faPlus} beat />
+                Ajout d'un problème
+              </button>
             </div>
-            <div className="box" style={{ flex: 2 }}>
-                <ChartPie chartData={chartData} />
+          </div>
+          <hr />
+          <div className="details">
+            <h3>La liste des problèmes lié à ce type de ménuiserie</h3>
+            <div className="problemContainer">
+              {problemContext?.problemsByType &&
+                problemContext.problemsByType.map((item, index) => (
+                  <div className="item" key={index}>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      className="icon"
+                      onClick={() => {
+                        setEditRow(item);
+                        setOpen(true);
+                      }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      className="icon"
+                      onClick={() => {
+                        setDeleteRow(item.id);
+                        setDeleteOpen(true);
+                      }}
+                    />
+                    <p>{item.name}</p>
+                  </div>
+                ))}
             </div>
-            {open && (
-                <AddForm
-                    slug="problème"
-                    columns={columns}
-                    setOpen={setOpen}
-                    editRow={editRow}
-                    setEditRow={setEditRow}
-                    initialValues={isProblem(editRow) && editRow ? { name: editRow.name } : initialValues}
-                    validate={validateType}
-                    url="/problem"
-                    data="problems"
-                    setState={problemContext?.setProblems}
-                />
-            )}
-            {deleteOpen && (
-                <ModalDelete
-                    title={`ce problème`}
-                    setDeleteOpen={setDeleteOpen}
-                    setDeleteRow={setDeleteRow}
-                    setState={problemContext?.setProblems}
-                    deleteRow={deleteRow}
-                    data="problems"
-                    url="/problem"
-                />
-            )}
+          </div>
         </div>
-    );
+      </div>
+      <div className="box" style={{ flex: 2 }}>
+        <ChartPie chartData={chartData} />
+      </div>
+      {open && (
+        <AddForm
+          slug="problème"
+          columns={columns}
+          setOpen={setOpen}
+          editRow={editRow}
+          setEditRow={setEditRow}
+          initialValues={
+            isProblem(editRow) && editRow
+              ? { name: editRow.name }
+              : initialValues
+          }
+          validate={validateType}
+          url="/problem"
+          data="problems"
+          setState={problemContext?.setProblems}
+        />
+      )}
+      {deleteOpen && (
+        <ModalDelete
+          title={`ce problème`}
+          setDeleteOpen={setDeleteOpen}
+          setDeleteRow={setDeleteRow}
+          setState={problemContext?.setProblems}
+          deleteRow={deleteRow}
+          data="problems"
+          url="/problem"
+        />
+      )}
+    </div>
+  );
 };
 
 export default Problems;
