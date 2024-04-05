@@ -11,6 +11,7 @@ export type Logs = {
     userId?: number
     productId?: number
     productTypeId?: number
+    problemId: number
 }[]
 
 type LogContextValue = {

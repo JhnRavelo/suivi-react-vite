@@ -1,16 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import useLog from "./useLog";
 import useHeader from "./useHeader";
 import useUser from "./useUser";
 import useProduct from "./useProduct";
 import useProductType from "./useProductType";
+import useProblem from "./useProblem";
+import useGetProblem from "./useGetProblem";
 
-export type Lists = {
-  log: string;
-  problem: string;
-  createdAt: string;
-  solution: string;
-}[] | null;
+export type Lists =
+  | {
+      log: string;
+      problem: string;
+      createdAt: string;
+      solution: string;
+    }[]
+  | null;
 
 const useCreateLogs = (id: number | string) => {
   const logContext = useLog();
@@ -19,9 +24,11 @@ const useCreateLogs = (id: number | string) => {
   const userContext = useUser();
   const productContext = useProduct();
   const productTypeContext = useProductType();
+  const problemContext = useProblem();
+  const getProblem = useGetProblem();
 
   useEffect(() => {
-    if (logContext?.logs && headerContext?.year) {
+    if (logContext?.logs && headerContext?.year && problemContext?.problems) {
       let logPerId = logContext.logs;
       if (id != "-1") {
         logPerId = logContext.logs.filter((item) => item.productId == id);
@@ -40,9 +47,14 @@ const useCreateLogs = (id: number | string) => {
           const matchProductType = productTypeContext?.types.find(
             (item) => item.id == log.productTypeId
           );
+          const problem = getProblem(
+            problemContext?.problems,
+            log.problemId,
+            log.problem
+          );
           return {
             log: `${matchUser?.name} a effectué un suivi du produit ${matchProductType?.name} du devis ${matchProduct?.devis} associé au client ${matchProduct?.client}.`,
-            problem: log.problem,
+            problem: problem,
             solution: log.solution,
             createdAt: log.createdAt,
           };
@@ -57,6 +69,7 @@ const useCreateLogs = (id: number | string) => {
     productContext?.products,
     productTypeContext?.types,
     id,
+    problemContext?.problems,
   ]);
   return lists;
 };
