@@ -1,4 +1,5 @@
 @import "../../pages/Admin/responsive.scss";
+@import "../../pages/Admin/variables.scss";
 
 .pieChartBox {
   height: 100%;
@@ -22,7 +23,12 @@
     height: 100%;
     margin-bottom: 20px;
   }
-
+  .custom-tooltipPie {
+    background-color: $soft-bg;
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid;
+  }
   .options {
     display: flex;
     overflow: hidden;

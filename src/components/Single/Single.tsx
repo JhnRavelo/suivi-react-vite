@@ -67,8 +67,8 @@ const Single = ({ item, chartData, dataKeys, activities }: SingleProps) => {
                 comme stipulé dans le devis <span>{item?.devis}</span> du
                 chantier <span>{item?.chantier}</span>
                 . <br />
-                <div style={{marginTop: "20px",}}>Problème fréquent : <span>{frequentProblem?.name} {frequentProblem?.count ? frequentProblem?.count + "fois" : ""}</span></div>
               </p>
+              <div style={{ marginTop: "20px", }}>Problème fréquent : <span>{frequentProblem?.name} {frequentProblem?.count ? frequentProblem?.count + "fois" : ""}</span></div>
             </div>
           </div>
         </div>

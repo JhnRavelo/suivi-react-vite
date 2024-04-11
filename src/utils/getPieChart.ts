@@ -12,12 +12,14 @@ const getPieChart = (values: StatProblems | StatProductTypes, datas: Problems | 
                 return {
                     name: match.name,
                     value: item.count,
-                    color: color
+                    color: color,
+                    id: item.id
                 }
             } else return {
                 name: "autre",
                 color: color,
-                value: item.count
+                value: item.count,
+                id: item.id
             }
         })
         return chartDataProblem
