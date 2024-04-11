@@ -136,8 +136,6 @@ const AddForm = ({
   const handleSubmit = async (values: InitialValues) => {
     const entries = Object.entries(values);
     const formData = new FormData();
-    console.log("UPDATE");
-
     entries.forEach(([key, value]) => {
       if ((key == "tech" || key == "type") && isInitialValuesProduct(values)) {
         const compare = values[key] ? values[key] : null;

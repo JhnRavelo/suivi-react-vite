@@ -45,7 +45,7 @@ const ModalDelete = ({
       } else res = await axiosPrivate.delete(`${url}/${deleteRow}`);
       if (res.data.success) {
         if (setState) {
-          if (modal == "restore" && isStateBool(setState)) {
+          if ((modal == "restore" || data == "suivis") && isStateBool(setState)) {
             setState((prev: boolean) => !prev);
           } else setState(res.data[data]);
           if (setCheckBox) {

@@ -1,10 +1,10 @@
 import { useState } from "react"
 import DataTable, { Colums } from "../../../components/DataTable/DataTable"
 import ModalDelete from "../../../components/ModalDelete/ModalDelete"
-import useSuvi from "../../../hooks/useSuvi"
 import { isSuivi } from "../../../utils/verificationType"
 import "../ProductTypes/productTypes.scss"
 import useRows from "../../../hooks/useRows"
+import useHeader from "../../../hooks/useHeader"
 
 const columns: Colums = [
     {
@@ -132,7 +132,7 @@ const columns: Colums = [
 ]
 
 const Suivis = () => {
-    const suiviContext = useSuvi()
+    const headerContext = useHeader()
     const rows = useRows("suivis")
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false)
     const [deleteRow, setDeleteRow] = useState<null | number>(null)
@@ -160,7 +160,7 @@ const Suivis = () => {
                     data="suivis"
                     url="/suivi/delete"
                     deleteRow={deleteRow}
-                    setState={suiviContext?.setSuivis}
+                    setState={headerContext?.setIsImport}
                 />
             )}
         </>

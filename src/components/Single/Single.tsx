@@ -12,6 +12,7 @@ import { Product } from "../../context/ProductContext";
 import { Lists } from "../../hooks/useCreateLogs";
 import { SingleDatas } from "../../assets/ts/data";
 import { SingleDataKeys } from "../../pages/Admin/Product/Product";
+import { useEffect, useState } from "react";
 
 type SingleProps = {
   item: Product | null;
@@ -20,7 +21,35 @@ type SingleProps = {
   dataKeys: SingleDataKeys;
 };
 
+type FrequentProblem = { name: string; count: number }
+
 const Single = ({ item, chartData, dataKeys, activities }: SingleProps) => {
+  const [frequentProblem, setFrequentProblem] = useState<FrequentProblem>();
+
+  useEffect(() => {
+    if (activities) {
+      const productProblems: FrequentProblem[] = [];
+      let problem = 0;
+      activities.forEach((activity) => {
+        const typeProblem = activity.problem.split(":")[0];
+        const matchProblem = productProblems.find(
+          (productProblem) => productProblem.name == typeProblem
+        );
+        if (matchProblem) {
+          matchProblem.count++;
+        } else {
+          productProblems.push({ name: typeProblem, count: 1 });
+        }
+      });
+      productProblems.forEach(productProblem => {
+        if (productProblem.count >= problem) {
+          setFrequentProblem(productProblem)
+          problem = productProblem.count
+        }
+      })
+    }
+  }, [activities]);
+
   return (
     <div className="product">
       <div className="view">
@@ -34,9 +63,11 @@ const Single = ({ item, chartData, dataKeys, activities }: SingleProps) => {
                 Ce produit a été enregistré par {item?.tech} le{" "}
                 {item?.createdAt.split(" ")[0]} à{" "}
                 {item?.createdAt.split(" ")[1]} aux alentours de{" "}
-                {item?.location}. Il a été créé pour <span>{item?.client}</span> comme
-                stipulé dans le devis <span>{item?.devis}</span> du chantier <span>{item?.chantier}</span>
-                .
+                {item?.location}. Il a été créé pour le client <span>{item?.client}</span>{" "}
+                comme stipulé dans le devis <span>{item?.devis}</span> du
+                chantier <span>{item?.chantier}</span>
+                . <br />
+                <div style={{marginTop: "20px",}}>Problème fréquent : <span>{frequentProblem?.name} {frequentProblem?.count ? frequentProblem?.count + "fois" : ""}</span></div>
               </p>
             </div>
           </div>
@@ -84,7 +115,7 @@ const Single = ({ item, chartData, dataKeys, activities }: SingleProps) => {
                 return (
                   <li key={index}>
                     <div>
-                      <p>{activity.log}</p>
+                      <p>Technicien du suivi: {activity.log.split(" ")[0]}</p>
                     </div>
                     <div
                       style={{
